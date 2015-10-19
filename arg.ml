@@ -4,7 +4,8 @@ let rec eval = function
 	| IntLit(x) -> x
 	| StrLit(x) -> x
 	| Seq(x1, x2) -> (eval x1) + (eval x2)
-	| Cmp(x1, x2) -> Asn(x1, x2)
+	| Asn(x, e1) -> let x = (eval e1)
+	| Cmp(x1, x2) -> x1 = x2
 	| Binop(e1, op, e2) ->
 		let v1 = eval e1 and v2 = eval e2 in
 		match op with
