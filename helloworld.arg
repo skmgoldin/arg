@@ -1,0 +1,3 @@
+print_me = "Hello, world!";
+
+PRINT("%s\n", print_me);
