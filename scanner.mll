@@ -9,7 +9,7 @@ rule token = parse
 	| '-' { MINUS }
 	| '*' { TIMES }
 	| '/' { DIVIDE }
-	| '=' { EQ }
+	| '=' { ASSIGN }
 	| "==" { CMP }
 	| eof { EOF }
 	| "/*" { comment lexbuf }

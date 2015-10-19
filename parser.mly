@@ -1,6 +1,6 @@
 %{ open Ast %}
 
-%token PLUS MINUS TIMES DIVIDE ASSIGN SEQUENCE CMP EQ EOF
+%token PLUS MINUS TIMES DIVIDE ASSIGN SEQUENCE CMP EOF
 %token <int> INTLIT VARIABLE
 %token <string> STRLIT
 
@@ -9,7 +9,6 @@
 %left ASSIGN
 %left PLUS MINUS
 %left TIMES DIVIDE
-%left EQ
 
 %start expr
 %type < Ast.expr> expr
@@ -23,7 +22,6 @@ expr:
 | expr DIVIDE expr { Binop($1, Div, $3) }
 | expr SEQUENCE expr      { Seq($1, $3) }
 | expr CMP expr    { Cmp($1, $3) }
-| VARIABLE EQ expr { Asn($1, $3) }
 | VARIABLE ASSIGN expr    { Asn($1, $3) }
 | INTLIT           { IntLit($1) }
 | STRLIT           { StrLit($1) }
