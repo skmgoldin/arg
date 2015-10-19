@@ -6,7 +6,8 @@ let addtovars var a =
 	vars.(var) <- a; a
 
 let rec eval = function
-	Lit(x) -> x
+	| IntLit(x) -> x
+	| StrLit(x) -> x
 	| Var(x) -> vars.(x)
 	| Asn(x, e1) -> addtovars x (eval e1)
 	| Seq(x1, x2) -> (eval x1) + (eval x2)
