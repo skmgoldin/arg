@@ -1,7 +1,8 @@
 %{ open Ast %}
 
 %token PLUS MINUS TIMES DIVIDE CMP EQ EOF
-%token <int> LITERAL VARIABLE
+%token <int> INTLIT VARIABLE
+%token <string> STRLIT
 
 %left PLUS MINUS
 %left TIMES DIVIDE
@@ -19,5 +20,6 @@ expr:
 | expr DIVIDE expr { Binop($1, Div, $3) }
 | expr CMP expr    { Binop($1, Cmp, $3) }
 | VARIABLE EQ expr { Asn($1, $3) }
-| LITERAL          { Lit($1) }
+| INTLIT           { Lit($1) }
+| STRLIT           { StrLit($1) }
 | VARIABLE	   { Lit($1) }
