@@ -1,17 +1,20 @@
 %{ open Ast %}
 
-%token PLUS MINUS TIMES DIVIDE ASSIGN SEQUENCE CMP EOF
+%token SEMI LPAREN RPAREN LBRACE RBRACE COMMA 
+%token PLUS MINUS TIMES DIVIDE ASSIGN
+%token EQ NEQ LT LEQ GT GEQ RETURN IF ELSE FOR WHILE EOF
 %token <int> INTLIT VARIABLE
-%token <string> STRLIT
+%token <string> STRLIT ID
 
-%left SEQUENCE
-%left CMP
-%left ASSIGN
+%nonassoc ELSE
+%right ASSIGN
+%left EQ NEQ
+%left LT GT LEQ GEQ
 %left PLUS MINUS
 %left TIMES DIVIDE
 
 %start expr
-%type < Ast.expr> expr
+%type <Ast.expr> expr
 
 %%
 
