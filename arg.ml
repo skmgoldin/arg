@@ -1,15 +1,8 @@
 open Ast
 
-let vars = Array.make 26 0
-
-let addtovars var a =
-	vars.(var) <- a; a
-
 let rec eval = function
 	| IntLit(x) -> x
 	| StrLit(x) -> x
-	| Var(x) -> vars.(x)
-	| Asn(x, e1) -> addtovars x (eval e1)
 	| Seq(x1, x2) -> (eval x1) + (eval x2)
 	| Cmp(x1, x2) -> Asn(x1, x2)
 	| Binop(e1, op, e2) ->
