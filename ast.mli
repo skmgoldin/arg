@@ -1,4 +1,4 @@
-type operator = Add | Sub | Mul | Div
+type operator = Add | Sub | Mul | Div | Cmp
 
 type expr =
 	Binop of expr * operator * expr
@@ -6,3 +6,4 @@ type expr =
 	| Seq of expr * expr
 	| Asn of int * expr
 	| Var of int
+	| Cmp of expr * expr
