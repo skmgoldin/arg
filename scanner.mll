@@ -1,18 +1,25 @@
 { open Parser }
 
 rule token = parse
-	| [' ' '\t' '\r' '\n'] { token lexbuf }
-	| ['A'-'Z' 'a'-'z']+ as lit { VARIABLE(int_of_string lit) }  (* Special case for capitals *)
-	| ['0'-'9']+ as intlit { INTLIT(int_of_string intlit) }
-	| " { string-character } " as stringlit { STRLIT(stringlit) }
-	| '+' { PLUS }
-	| '-' { MINUS }
-	| '*' { TIMES }
-	| '/' { DIVIDE }
-	| '=' { ASSIGN }
-	| "==" { CMP }
-	| eof { EOF }
-	| "/*" { comment lexbuf }
-and comment =
-	parse "*/" { token lexbuf }
-	| _ { comment lexbuf }
+| [' ' '\t' '\r' '\n'] { token lexbuf }
+| "/*"                 { comment lexbuf }
+| '('       { LPAREN }    | ')'       { RPAREN }
+| '{'       { LBRACE }    | '}'       { RBRACE } 
+| ';'       { SEMI }      | ','       { COMMA }
+| '+'       { PLUS }      | '-'       { MINUS }
+| '*'       { TIMES }     | '/'       { DIVIDE }
+| '='       { ASSIGN }    
+| "=="      { EQ }        | "!="      { NEQ }
+| '<'       { LT }        | '>'       { GT }
+| "<="      { LEQ }       | ">="      { GEQ }
+| "if"      { IF }        | "else"    { ELSE }
+| "while"   { WHILE }     | "for"     { FOR }
+| "return"  { RET }       | "STOP"    { STOP }
+| '!'       { EXC }       | eof       { EOF }
+| ['0'-'9']+ as lxm { LITERAL(int_of_string lxm) }
+| ['A'-'Z' 'a'-'z']['A'-'Z' 'a'-'z' '0'-'9' '_']* as lxm { VARIABLE(int_of_string lsm) }
+| _ as char { raise (Failure("Illegal character " ^ Char.escaped char)) }
+
+and comment = parse
+| "*/"  { token lexbuf }
+| _     { comment lexbuf }
