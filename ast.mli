@@ -1,10 +1,14 @@
 type op = Add | Sub | Mul | Div | Eq | Neq | Lt | Gt | Leq | Geq 
 
 type expr =
-	Binop of expr * operator * expr
-	| IntLit of int
-	| StrLit of string 
-	| Seq of expr * expr
-	| Asn of int * expr
-	| Var of int
-	| Cmp of expr * expr
+  | Literal of int  
+  | Noexpr
+
+type func_decl = {
+  fname : string;         (* Name of the function *)
+  formals : string list;  (* Formal argument names *)
+  locals : string list;   (* Locally defined variables *)
+  body : stmt list;
+}
+
+type program = string list * func_decl list
