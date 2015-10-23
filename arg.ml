@@ -7,7 +7,7 @@ let rec eval = function
 		match op with
 			Add -> v1 + v2
 			| Sub -> v1 - v2
-			| Mul -> v1 * v2
+			| Mult -> v1 * v2
 			| Div -> v1 / v2
 
 let _ =

@@ -45,7 +45,7 @@ stmt_list:
   | stmt_list stmt    { $2 :: $1 }
 
 stmt:
-  | expr SEMI         { expr($1) }
+  | expr SEMI         { Expr($1) }
   | RET expr SEMI     { Ret($2) }
   | LBRACE stmt_list RBRACE { Block(List.rev($2)) }
 
@@ -74,10 +74,18 @@ expr:
   | expr DIVIDE expr              { Binop($1, Div, $3) }
   | expr EQ expr                  { Binop($1, Eq, $3) }
   | expr NEQ expr                 { Binop($1, Neq, $3) }
-  | expr LT expr                  { Binop($1, Less, $3) }
+  | expr LT expr                  { Binop($1, Lt, $3) }
   | expr LEQ expr                 { Binop($1, Leq, $3) }
-  | expr GT expr                  { Binop($1, Greater, $3) }
+  | expr GT expr                  { Binop($1, Gt, $3) }
   | expr GEQ expr                 { Binop($1, Geq, $3) }
   | VAR ASSIGN expr               { Assign($1, $3) }
   | VAR LPAREN actuals_opt RPAREN { Call($1, $3) }
   | LPAREN expr RPAREN            { $2 }
+
+actuals_opt:
+  | /* Nothing */                 { [] }
+  | actuals_list                  { List.rev $1 }
+
+actuals_list:
+  | expr                          { [$1] }
+  | actuals_list COMMA expr       { $3 :: $1 }
