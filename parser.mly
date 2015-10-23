@@ -86,7 +86,9 @@ expr_opt:
 
 expr:
   | INTLITERAL                    { IntLiteral($1) }
+  | FLOATLITERAL                  { FloatLiteral($1) }
   | STRLITERAL                    { StrLiteral($1) }
+  | BOOLLITERAL                   { BoolLiteral($1) }
   | VAR                           { Var($1) }
   | expr PLUS expr                { Binop($1, Add, $3) }
   | expr MINUS expr               { Binop($1, Sub, $3) }
