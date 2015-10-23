@@ -13,6 +13,9 @@ type stmt =
   | Block of stmt list
   | Expr of expr
   | Ret of expr
+  | If of expr * stmt * stmt
+  | For of expr * expr * expr * stmt
+  | While of expr * stmt
 
 type func_decl = {
   fname : string;         (* Name of the function *)

@@ -48,6 +48,11 @@ stmt:
   | expr SEMI         { Expr($1) }
   | RET expr SEMI     { Ret($2) }
   | LBRACE stmt_list RBRACE { Block(List.rev($2)) }
+  | IF LPAREN expr RPAREN stmt %prec NOELSE { If($3, $5, Block([])) }
+  | IF LPAREN expr RPAREN stmt ELSE stmt { If($3, $5, $7) }
+  | FOR LPAREN expr_opt SEMI expr_opt SEMI expr_opt RPAREN stmt
+    { For($3, $5, $7, $9) }
+  | WHILE LPAREN expr RPAREN stmt { While($3, $5) }
 
 fdecl:
   VAR LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
@@ -63,6 +68,10 @@ formals_opt:
 formal_list:
   | VAR                    { [$1] }
   | formal_list COMMA VAR  { $3 :: $1 }
+
+expr_opt:
+  | /* Nothing */                 { Noexpr }
+  | expr                          { $1 }
 
 expr:
   | INTLITERAL                    { IntLiteral($1) }
