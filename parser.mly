@@ -31,29 +31,6 @@ decls:
   | decls vdecl { ($2 :: fst $1), snd $1 }
   | decls fdecl { fst $1, ($2 :: snd $1) }
 
-vdecl:
-  | VAR SEMI { $1 }
-  | VAR ASSIGN INTLITERAL { $1 }
-  | VAR ASSIGN STRLITERAL { $1 }
-
-vdecl_list:
-  | /* Nothing */     { [] }
-  | vdecl_list vdecl  { $2 :: $1 }
-
-stmt_list:
-  | /* Nothing */     { [] }
-  | stmt_list stmt    { $2 :: $1 }
-
-stmt:
-  | expr SEMI         { Expr($1) }
-  | RET expr SEMI     { Ret($2) }
-  | LBRACE stmt_list RBRACE { Block(List.rev($2)) }
-  | IF LPAREN expr RPAREN stmt %prec NOELSE { If($3, $5, Block([])) }
-  | IF LPAREN expr RPAREN stmt ELSE stmt { If($3, $5, $7) }
-  | FOR LPAREN expr_opt SEMI expr_opt SEMI expr_opt RPAREN stmt
-    { For($3, $5, $7, $9) }
-  | WHILE LPAREN expr RPAREN stmt { While($3, $5) }
-
 fdecl:
   VAR LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
     { { fname   = $1;
@@ -68,6 +45,29 @@ formals_opt:
 formal_list:
   | VAR                    { [$1] }
   | formal_list COMMA VAR  { $3 :: $1 }
+
+vdecl_list:
+  | /* Nothing */     { [] }
+  | vdecl_list vdecl  { $2 :: $1 }
+
+vdecl:
+  | VAR SEMI { $1 }
+  | VAR ASSIGN INTLITERAL { $1 }
+  | VAR ASSIGN STRLITERAL { $1 }
+
+stmt_list:
+  | /* Nothing */     { [] }
+  | stmt_list stmt    { $2 :: $1 }
+
+stmt:
+  | expr SEMI         { Expr($1) }
+  | RET expr SEMI     { Ret($2) }
+  | LBRACE stmt_list RBRACE { Block(List.rev($2)) }
+  | IF LPAREN expr RPAREN stmt %prec NOELSE { If($3, $5, Block([])) }
+  | IF LPAREN expr RPAREN stmt ELSE stmt { If($3, $5, $7) }
+  | FOR LPAREN expr_opt SEMI expr_opt SEMI expr_opt RPAREN stmt
+    { For($3, $5, $7, $9) }
+  | WHILE LPAREN expr RPAREN stmt { While($3, $5) }
 
 expr_opt:
   | /* Nothing */                 { Noexpr }
