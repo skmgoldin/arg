@@ -1,11 +1,15 @@
 %{ open Ast %}
 
-%token SEMI LPAREN RPAREN LBRACE RBRACE COMMA 
+%token LPAREN RPAREN LBRACE RBRACE SEMI COMMA 
 %token PLUS MINUS TIMES DIVIDE ASSIGN
-%token EQ NEQ LT LEQ GT GEQ RETURN IF ELSE FOR WHILE EOF
-%token <int> INTLIT VARIABLE
-%token <string> STRLIT ID
+%token EQ NEQ LT GT LEQ GEQ
+%token IF ELSE WHILE FOR RET
+%token STOP EXC
+%token EOF
+%token <int> LITERAL
+%token <string> VARIABLE
 
+%nonassoc NOELSE
 %nonassoc ELSE
 %right ASSIGN
 %left EQ NEQ
@@ -13,8 +17,8 @@
 %left PLUS MINUS
 %left TIMES DIVIDE
 
-%start expr
-%type <Ast.expr> expr
+%start program
+%type <Ast.program> program
 
 %%
 
