@@ -68,6 +68,15 @@ stmt:
   | FOR LPAREN expr_opt SEMI expr_opt SEMI expr_opt RPAREN stmt
     { For($3, $5, $7, $9) }
   | WHILE LPAREN expr RPAREN stmt { While($3, $5) }
+  | STOP exc_opt                  { Stop($2) }
+
+exc_opt:
+  | /* Nothing */                 { [] }
+  | exc_list                      { $1 }
+
+exc_list:
+  | EXC                           { ['!'] }
+  | exc_list EXC                  { '!' :: $1 }
 
 expr_opt:
   | /* Nothing */                 { Noexpr }

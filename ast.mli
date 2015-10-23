@@ -16,7 +16,7 @@ type stmt =
   | If of expr * stmt * stmt
   | For of expr * expr * expr * stmt
   | While of expr * stmt
-  | STOP of string
+  | Stop of char list
 
 type func_decl = {
   fname : string;         (* Name of the function *)
