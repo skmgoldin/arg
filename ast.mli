@@ -4,6 +4,9 @@ type expr =
   | Literal of int  
   | Noexpr
 
+type stmt = 
+  | Block of stmt list
+
 type func_decl = {
   fname : string;         (* Name of the function *)
   formals : string list;  (* Formal argument names *)

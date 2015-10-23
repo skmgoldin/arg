@@ -17,7 +17,7 @@ rule token = parse
 | "return"  { RET }       | "STOP"    { STOP }
 | '!'       { EXC }       | eof       { EOF }
 | ['0'-'9']+ as lxm { LITERAL(int_of_string lxm) }
-| ['A'-'Z' 'a'-'z']['A'-'Z' 'a'-'z' '0'-'9' '_']* as lxm { VARIABLE(int_of_string lsm) }
+| ['A'-'Z' 'a'-'z']['A'-'Z' 'a'-'z' '0'-'9' '_']* as lxm { VARIABLE(lxm) }
 | _ as char { raise (Failure("Illegal character " ^ Char.escaped char)) }
 
 and comment = parse
