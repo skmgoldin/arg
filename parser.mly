@@ -78,6 +78,6 @@ expr:
   | expr LEQ expr                 { Binop($1, Leq, $3) }
   | expr GT expr                  { Binop($1, Greater, $3) }
   | expr GEQ expr                 { Binop($1, Geq, $3) }
-  | ID ASSIGN expr                { Assign($1, $3) }
-  | ID LPAREN actuals_opt RPAREN  { Call($1, $3) }
+  | VAR ASSIGN expr               { Assign($1, $3) }
+  | VAR LPAREN actuals_opt RPAREN { Call($1, $3) }
   | LPAREN expr RPAREN            { $2 }
