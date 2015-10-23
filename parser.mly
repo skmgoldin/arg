@@ -8,7 +8,7 @@
 %token EOF
 %token <int> INTLITERAL
 %token <string> STRLITERAL
-%token <string> VARIABLE
+%token <string> VAR
 
 %nonassoc NOELSE
 %nonassoc ELSE
@@ -32,5 +32,36 @@ decls:
   | decls fdecl { fst $1, ($2 :: snd $1) }
 
 vdecl:
-  | VARIABLE SEMI { $1 }
-  | VARIABLE ASSIGN LITERAL { $1 }
+  | VAR SEMI { $1 }
+  | VAR ASSIGN INTLITERAL { $1 }
+  | VAR ASSIGN STRLITERAL { $1 }
+
+vdecl_list:
+  | /* Nothing */     { [] }
+  | vdecl_list vdecl  { $2 :: $1 }
+
+fdecl:
+  VAR LPAREN formals_opt RPAREN LBRACE vdecl_list stmt_list RBRACE
+    { { fname   = $1;
+        formals = $3;
+        locals  = List.rev $6;
+        body    = List.rev $7 } }
+
+formals_opt:
+  | /* Nothing */ { [] }
+  | formal_list   { List.rev $1 }
+
+formal_list:
+  | VAR                    { [$1] }
+  | formal_list COMMA VAR  { $3 :: $1 }
+
+expr:
+  | INTLITERAL        { IntLiteral($1) }
+  | STRLITERAL        { StrLiteral($1) }
+  | VAR          { Var($1) }
+  | expr PLUS expr    { Binop($1, Add, $3) }
+  | expr MINUS expr    { Binop($1, Sub, $3) }
+  | expr TIMES expr    { Binop($1, Mult, $3) }
+  | expr DIVIDE expr    { Binop($1, Div, $3) }
+  | expr EQ expr      { Binop($1, Eq, $3) }
+  | expr NEQ expr    { Binop($1, Neq, $3) }
