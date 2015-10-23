@@ -8,7 +8,7 @@ rule token = parse
 | ';'       { SEMI }      | ','       { COMMA }
 | '+'       { PLUS }      | '-'       { MINUS }
 | '*'       { TIMES }     | '/'       { DIVIDE }
-| '='       { ASSIGN }    
+| '='       { ASSIGN }     
 | "=="      { EQ }        | "!="      { NEQ }
 | '<'       { LT }        | '>'       { GT }
 | "<="      { LEQ }       | ">="      { GEQ }
@@ -16,7 +16,8 @@ rule token = parse
 | "while"   { WHILE }     | "for"     { FOR }
 | "return"  { RET }       | "STOP"    { STOP }
 | '!'       { EXC }       | eof       { EOF }
-| ['0'-'9']+ as lxm { LITERAL(int_of_string lxm) }
+| ['0'-'9']+ as lxm { INTLITERAL(int_of_string lxm) }
+| " { string-character } "+ as lxm { STRLITERAL(lxm) }
 | ['A'-'Z' 'a'-'z']['A'-'Z' 'a'-'z' '0'-'9' '_']* as lxm { VARIABLE(lxm) }
 | _ as char { raise (Failure("Illegal character " ^ Char.escaped char)) }
 

@@ -6,7 +6,8 @@
 %token IF ELSE WHILE FOR RET
 %token STOP EXC
 %token EOF
-%token <int> LITERAL
+%token <int> INTLITERAL
+%token <string> STRLITERAL
 %token <string> VARIABLE
 
 %nonassoc NOELSE
@@ -27,3 +28,9 @@ program:
 
 decls:
   /* Nothing */ { [], [] }
+  | decls vdecl { ($2 :: fst $1), snd $1 }
+  | decls fdecl { fst $1, ($2 :: snd $1) }
+
+vdecl:
+  | VARIABLE SEMI { $1 }
+  | VARIABLE ASSIGN LITERAL { $1 }
