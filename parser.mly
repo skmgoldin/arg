@@ -7,7 +7,9 @@
 %token STOP EXC
 %token EOF
 %token <int> INTLITERAL
+%token <float> FLOATLITERAL
 %token <string> STRLITERAL
+%token <string> BOOLLITERAL
 %token <string> VAR
 
 %nonassoc NOELSE
