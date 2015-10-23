@@ -1,4 +1,4 @@
-type operator = Add | Sub | Mul | Div | Cmp
+type op = Add | Sub | Mul | Div | Eq | Neq | Lt | Gt | Leq | Geq 
 
 type expr =
 	Binop of expr * operator * expr
