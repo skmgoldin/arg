@@ -1,17 +1,9 @@
-// FUNCTION PRINTN(...)
-
-// FUNCTION PRINT(fmt, string) {
-	
-// } 
-
+FUNCTION print(x, y) {
+  return y;
+}
 
 five = 5;
 ten = 10;
 fifteen = i + k;
 
-PRINT(fifteen)
-
-print_me = "Hello, world!";
-
-PRINT("%x\n", print_me);
-
+print("%x/n", "Hello, World!");
