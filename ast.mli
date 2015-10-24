@@ -2,7 +2,9 @@ type op = Add | Sub | Mult | Div | Eq | Neq | Lt | Gt | Leq | Geq
 
 type expr =
   | IntLiteral of int  
+  | FloatLiteral of float  
   | StrLiteral of string  
+  | BoolLiteral of bool
   | Noexpr
   | Var of string
   | Assign of string * expr

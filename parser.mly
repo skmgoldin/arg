@@ -9,7 +9,7 @@
 %token <int> INTLITERAL
 %token <float> FLOATLITERAL
 %token <string> STRLITERAL
-%token <string> BOOLLITERAL
+%token <bool> BOOLLITERAL
 %token <string> VAR
 
 %nonassoc NOELSE
