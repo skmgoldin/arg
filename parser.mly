@@ -41,28 +41,28 @@ fdecl:
                                       body    = List.rev $7 } }
 
 formals_opt:
-  | /* Nothing */                 { [] }
+   /* Nothing */                 { [] }
   | formal_list                   { List.rev $1 }
 
 formal_list:
-  | VAR                           { [$1] }
+   VAR                           { [$1] }
   | formal_list COMMA VAR         { $3 :: $1 }
 
 vdecl_list:
-  | /* Nothing */                 { [] }
+   /* Nothing */                 { [] }
   | vdecl_list vdecl              { $2 :: $1 }
 
 vdecl:
-  | VAR SEMI                      { $1 }
+   VAR SEMI                      { $1 }
   | VAR ASSIGN INTLITERAL         { $1 }
   | VAR ASSIGN STRLITERAL         { $1 }
 
 stmt_list:
-  | /* Nothing */                 { [] }
+   /* Nothing */                 { [] }
   | stmt_list stmt                { $2 :: $1 }
 
 stmt:
-  | expr SEMI                     { Expr($1) }
+   expr SEMI                     { Expr($1) }
   | RET expr SEMI                 { Ret($2) }
   | LBRACE stmt_list RBRACE       { Block(List.rev($2)) }
   | IF LPAREN expr RPAREN stmt %prec NOELSE
@@ -75,19 +75,19 @@ stmt:
   | STOP exc_opt                  { Stop($2) }
 
 exc_opt:
-  | /* Nothing */                 { [] }
+   /* Nothing */                 { [] }
   | exc_list                      { $1 }
 
 exc_list:
-  | EXC                           { ['!'] }
+   EXC                           { ['!'] }
   | exc_list EXC                  { '!' :: $1 }
 
 expr_opt:
-  | /* Nothing */                 { Noexpr }
+   /* Nothing */                 { Noexpr }
   | expr                          { $1 }
 
 expr:
-  | INTLITERAL                    { IntLiteral($1) }
+    INTLITERAL                    { IntLiteral($1) }
   | FLOATLITERAL                  { FloatLiteral($1) }
   | STRLITERAL                    { StrLiteral($1) }
   | BOOLLITERAL                   { BoolLiteral($1) }
@@ -107,9 +107,9 @@ expr:
   | LPAREN expr RPAREN            { $2 }
 
 actuals_opt:
-  | /* Nothing */                 { [] }
+   /* Nothing */                 { [] }
   | actuals_list                  { List.rev $1 }
 
 actuals_list:
-  | expr                          { [$1] }
+   expr                          { [$1] }
   | actuals_list COMMA expr       { $3 :: $1 }
