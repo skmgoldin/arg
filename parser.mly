@@ -54,8 +54,8 @@ vdecl_list:
 
 vdecl:
    VAR SEMI                      { $1 }
-  | VAR ASSIGN INTLITERAL         { $1 }
-  | VAR ASSIGN STRLITERAL         { $1 }
+  | VAR ASSIGN INTLITERAL SEMI         { $1 }
+  | VAR ASSIGN STRLITERAL SEMI         { $1 }
 
 stmt_list:
    /* Nothing */                 { [] }
