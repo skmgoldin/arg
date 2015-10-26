@@ -14,6 +14,8 @@ rule token = parse
 | "<="      { LEQ }       | ">="      { GEQ }
 | "if"      { IF }        | "else"    { ELSE }
 | "while"   { WHILE }     | "for"     { FOR }
+| "int"     { INT }       | "char"    { CHAR }
+| "double"  { DOUBLE }    | "boolean" { BOOLEAN }
 | "return"  { RET }       | "STOP"    { STOP }
 | '!'       { EXC }       | eof       { EOF }
 | ['0'-'9']+                as lxm { INTLITERAL(int_of_string lxm) }

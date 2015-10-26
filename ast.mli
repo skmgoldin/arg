@@ -1,7 +1,9 @@
 type op = Add | Sub | Mult | Div | Eq | Neq | Lt | Gt | Leq | Geq 
 
+type arg_type = Int | Char | Double | Boolean
+
 type expr =
-  | IntLiteral of int  
+   IntLiteral of int  
   | FloatLiteral of float  
   | StrLiteral of string  
   | BoolLiteral of bool
@@ -10,9 +12,13 @@ type expr =
   | Assign of string * expr
   | Binop of expr * op * expr
   | Call of string * expr list 
+	| CastInt of expr
+	| CastBoolean of expr
+	| CastChar of expr
+	| CastDouble of expr
 
 type stmt = 
-  | Block of stmt list
+   Block of stmt list
   | Expr of expr
   | Ret of expr
   | If of expr * stmt * stmt

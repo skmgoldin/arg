@@ -3,9 +3,10 @@
 %token LPAREN RPAREN LBRACE RBRACE SEMI COMMA 
 %token PLUS MINUS TIMES DIVIDE ASSIGN
 %token EQ NEQ LT GT LEQ GEQ
-%token IF ELSE WHILE FOR RET
+%token IF ELSE WHILE RET
 %token STOP EXC
 %token EOF
+%token INT BOOLEAN DOUBLE CHAR
 %token <int> INTLITERAL
 %token <float> FLOATLITERAL
 %token <string> STRLITERAL
@@ -54,8 +55,6 @@ vdecl_list:
 
 vdecl:
    VAR SEMI                      { $1 }
-  | VAR ASSIGN INTLITERAL SEMI         { $1 }
-  | VAR ASSIGN STRLITERAL SEMI         { $1 }
 
 stmt_list:
    /* Nothing */                 { [] }
@@ -69,8 +68,6 @@ stmt:
                                   { If($3, $5, Block([])) }
   | IF LPAREN expr RPAREN stmt ELSE stmt
                                   { If($3, $5, $7) }
-  | FOR LPAREN expr_opt SEMI expr_opt SEMI expr_opt RPAREN stmt
-                                  { For($3, $5, $7, $9) }
   | WHILE LPAREN expr RPAREN stmt { While($3, $5) }
   | STOP exc_opt                  { Stop($2) }
 
@@ -82,9 +79,6 @@ exc_list:
    EXC                           { ['!'] }
   | exc_list EXC                  { '!' :: $1 }
 
-expr_opt:
-   /* Nothing */                 { Noexpr }
-  | expr                          { $1 }
 
 expr:
     INTLITERAL                    { IntLiteral($1) }
@@ -104,6 +98,10 @@ expr:
   | expr GEQ expr                 { Binop($1, Geq, $3) }
   | VAR ASSIGN expr               { Assign($1, $3) }
   | VAR LPAREN actuals_opt RPAREN { Call($1, $3) }
+	| LPAREN INT RPAREN LPAREN expr RPAREN        { CastInt($4) }
+	| LPAREN BOOLEAN RPAREN LPAREN expr RPAREN    { CastBoolean($4) }
+	| LPAREN CHAR RPAREN LPAREN expr RPAREN       { CastChar($4) }
+	| LPAREN DOUBLE RPAREN LPAREN expr RPAREN     { CastDouble($4) }
   | LPAREN expr RPAREN            { $2 }
 
 actuals_opt:
