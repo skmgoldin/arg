@@ -20,7 +20,10 @@ program:
 stmts:
   | /* Nothing */                 { [], [] }
   | stmts vdecl                   { ($2 :: fst $1), snd $1 }
+  | stmts print                   { $1 }
 
 vdecl:
   | VAR SEMI                      { $1 }
 
+print:
+  | PRINT LPAREN VAR RPAREN SEMI  { }
