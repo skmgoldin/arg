@@ -1,10 +1,11 @@
 %{ open Ast %}
 
-%token COMMA SEMI DQUOTE
+%token COMMA SEMI
+%token LPAREN RPAREN
 %token ASSIGN
-%token EOF
-%token <string> STRLITERAL 
+%token <string> STRLITERAL
 %token <string> ID
+%token EOF
 
 %right ASSIGN
 
@@ -14,15 +15,13 @@
 %%
 
 program:
-  stmts EOF                       { $1 }
+  code EOF                       { $1 }
 
-stmts:
-  | /* Nothing */                 { [], [] }
-  | stmts vdecl                   { ($2 :: fst $1), snd $1 }
-
-vdecl:
-  | ID ASSIGN expr SEMI          { $1 }
+code:
+  | /* Nothing */                           { [], [] }
+  | code expr                          { $2 :: $1 }
 
 expr:
-  | STRLITERAL                    { $1 }
-  | ID                           { $1 }
+  | ID ASSIGN expr   { Assign($1, $3) }
+  | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
+  | STRLITERAL          { StrLiteral($1) }

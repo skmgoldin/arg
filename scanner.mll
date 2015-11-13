@@ -3,16 +3,14 @@
 rule token = parse
 | [' ' '\t' '\r' '\n'] { token lexbuf }
 | "/*"                 { comment lexbuf }
-
-| '"'       { DQUOTE }
+| '('       { LPAREN }
+| ')'       { RPAREN }
+| ','       { COMMA }
 | ';'       { SEMI }
 | '='       { ASSIGN }
-| ','       { COMMA }
-
-| eof       { EOF }
-
 | " { string-character } " as lxm    { STRLITERAL(lxm) }
 | ['A'-'Z' 'a'-'z']['A'-'Z' 'a'-'z' '0'-'9' '_']* as lxm { ID(lxm) }
+| eof       { EOF }
 | _ as char { raise (Failure("Illegal character " ^ Char.escaped char)) }
 
 and comment = parse

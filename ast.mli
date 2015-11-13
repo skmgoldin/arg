@@ -1,9 +1,9 @@
 type expr =
   | StrLiteral of string
-  | Var of string
+  | Id of string
   | Assign of string * expr
 
-type stmt = 
+type stmt =
   | Block of stmt list
   | Expr of expr
 
