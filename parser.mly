@@ -1,10 +1,11 @@
 %{ open Ast %}
 
 %token PRINT
-%token LPAREN RPAREN SEMI
+%token COMMA SEMI
+%token LPAREN RPAREN DQUOTE
 %token ASSIGN
 %token EOF
-%token <int> INTLITERAL
+%token <string> STRLITERAL 
 %token <string> VAR
 
 %right ASSIGN
