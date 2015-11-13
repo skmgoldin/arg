@@ -27,7 +27,8 @@ statement:
 expr:
   | ID ASSIGN expr               { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
-  | STRLITERAL                  { StrLiteral($1) }
+  | STRLITERAL                   { StrLiteral($1) }
+  | ID                           { Id($1) } 
 
 actuals_opt:
   | /* Nothing */                { [] }
