@@ -15,3 +15,8 @@ let _ =
   let expr = Parser.expr Scanner.token lexbuf in
   let result = eval expr in
   print_endline (string_of_int result)
+
+let _ =
+  let lexbuf = Lexing.from_channel stdin in
+  let program = Parser.program Scanner.token lexbuf in
+  Execute.execute_prog (Compile.translate program)
