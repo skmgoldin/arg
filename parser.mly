@@ -1,8 +1,6 @@
 %{ open Ast %}
 
-%token PRINT
-%token COMMA SEMI
-%token LPAREN RPAREN DQUOTE
+%token COMMA SEMI DQUOTE
 %token ASSIGN
 %token EOF
 %token <string> STRLITERAL 
