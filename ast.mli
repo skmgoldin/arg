@@ -1,30 +1,11 @@
-type op = Add | Sub | Mult | Div | Eq | Neq | Lt | Gt | Leq | Geq 
-
-type arg_type = Int | Char | Double | Boolean
-
 type expr =
-   IntLiteral of int  
-  | FloatLiteral of float  
-  | StrLiteral of string  
-  | BoolLiteral of bool
-  | Noexpr
-  | Var of string
-  | Assign of string * expr
-  | Binop of expr * op * expr
-  | Call of string * expr list 
-	| CastInt of expr
-	| CastBoolean of expr
-	| CastChar of expr
-	| CastDouble of expr
+| StrLiteral of string
+| Var of string
+| Assign of string * expr
 
 type stmt = 
-   Block of stmt list
+  | Block of stmt list
   | Expr of expr
-  | Ret of expr
-  | If of expr * stmt * stmt
-  | For of expr * expr * expr * stmt
-  | While of expr * stmt
-  | Stop of char list
 
 type func_decl = {
   fname : string;         (* Name of the function *)
