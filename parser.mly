@@ -18,18 +18,18 @@ program:
   code EOF                       { $1 }
 
 code:
-  | /* Nothing */                           { [], [] }
+  | /* Nothing */                      { [] }
   | code expr                          { $2 :: $1 }
 
 expr:
-  | ID ASSIGN expr   { Assign($1, $3) }
+  | ID ASSIGN expr               { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
-  | STRLITERAL          { StrLiteral($1) }
+  | STRLITERAL                   { StrLiteral($1) }
 
 actuals_opt:
-    /* nothing */ { [] }
+  | /* Nothing */ { [] }
   | actuals_list  { List.rev $1 }
 
 actuals_list:
-    expr                    { [$1] }
+  | expr                    { [$1] }
   | actuals_list COMMA expr { $3 :: $1 }
