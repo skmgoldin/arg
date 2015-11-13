@@ -11,7 +11,7 @@ rule token = parse
 
 | eof       { EOF }
 
-| " { string-character } "+ as lxm    { STRLITERAL(lxm) }
+| " { string-character } " as lxm    { STRLITERAL(lxm) }
 | ['A'-'Z' 'a'-'z']['A'-'Z' 'a'-'z' '0'-'9' '_']* as lxm { ID(lxm) }
 | _ as char { raise (Failure("Illegal character " ^ Char.escaped char)) }
 
