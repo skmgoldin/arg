@@ -1,7 +1,7 @@
 type expr =
-| StrLiteral of string
-| Var of string
-| Assign of string * expr
+  | StrLiteral of string
+  | Var of string
+  | Assign of string * expr
 
 type stmt = 
   | Block of stmt list
