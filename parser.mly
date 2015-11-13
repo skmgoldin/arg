@@ -4,7 +4,7 @@
 %token ASSIGN
 %token EOF
 %token <string> STRLITERAL 
-%token <string> VAR
+%token <string> ID
 
 %right ASSIGN
 
@@ -21,4 +21,8 @@ stmts:
   | stmts vdecl                   { ($2 :: fst $1), snd $1 }
 
 vdecl:
-  | VAR SEMI                      { $1 }
+  | ID ASSIGN expr SEMI          { $1 }
+
+expr:
+  | STRLITERAL                    { $1 }
+  | ID                           { $1 }
