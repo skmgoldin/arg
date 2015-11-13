@@ -10,6 +10,8 @@ let _ =
   print_endline (string_of_int result)
 *)
 
+let file = "helloworld.arg"
+
 let rec string_of_expr = function
   | StrLiteral(l) -> l
   | Id(s) -> s
@@ -29,6 +31,7 @@ let rec translateProgram = function
 
 
 let _ =
-  let lexbuf = Lexing.from_channel stdin in
+	let ic = open_in file in
+  let lexbuf = Lexing.from_channel ic in
   let program = Parser.program Scanner.token lexbuf in
-  translateProgram program
+  print_endline (translateProgram program)
