@@ -25,3 +25,11 @@ expr:
   | ID ASSIGN expr   { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN { Call($1, $3) }
   | STRLITERAL          { StrLiteral($1) }
+
+actuals_opt:
+    /* nothing */ { [] }
+  | actuals_list  { List.rev $1 }
+
+actuals_list:
+    expr                    { [$1] }
+  | actuals_list COMMA expr { $3 :: $1 }
