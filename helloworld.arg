@@ -1,9 +1,3 @@
-FUNCTION print(x, y) {
-  return y;
-}
+msg = "Hello, World!"
 
-five = 5;
-ten = 10;
-fifteen = i + k;
-
-print("%x/n", "Hello, World!");
+PRINT("%x/n", msg);
