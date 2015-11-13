@@ -19,12 +19,15 @@ program:
 
 code:
   | /* Nothing */                { [] }
-  | code expr                    { $2 :: $1 }
+  | code statement                    { $2 :: $1 }
+
+statement:
+  | expr SEMI     { $1 }
 
 expr:
   | ID ASSIGN expr               { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN SEMI { Call($1, $3) }
-  | STRLITERAL SEMI                  { StrLiteral($1) }
+  | STRLITERAL                  { StrLiteral($1) }
 
 actuals_opt:
   | /* Nothing */                { [] }
