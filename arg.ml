@@ -13,11 +13,11 @@ let rec string_of_stmnt expr =
   string_of_expr expr ^ ";\n"
 
 let rec translateProgram = function
-	| [] -> ""
-	| stmnt :: tl -> (string_of_stmnt stmnt) ^ translateProgram tl
+  | [] -> ""
+  | stmnt :: tl -> (string_of_stmnt stmnt) ^ translateProgram tl
 
 let _ =
-	let ic = open_in file in
+  let ic = open_in file in
   let lexbuf = Lexing.from_channel ic in
   let program = Parser.program Scanner.token lexbuf in
   print_endline (translateProgram program)
