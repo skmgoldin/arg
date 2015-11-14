@@ -15,7 +15,7 @@
 %%
 
 program:
-  code EOF                             { $1 }
+  code EOF                             { List.rev $1 }
 
 code:
   | /* Nothing */                      { [] }
