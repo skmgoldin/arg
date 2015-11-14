@@ -4,7 +4,7 @@ let file = "helloworld.arg"
 
 let rec string_of_expr = function
   | Assign(v, e) -> v ^ " = " ^ string_of_expr e
-  | Call(id, params) -> id ^ "(" ^ string_of_expr (List.hd params) ^ ");"
+  | Call(id, params) -> id ^ "(" ^ string_of_expr (List.hd params) ^ ")"
   | StrLiteral(l) -> l
   | Id(s) -> s
   | Noexpr -> ""
