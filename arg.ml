@@ -2,17 +2,24 @@ open Ast
 
 let file = "helloworld.arg"
 
+let rec toStringList inp out =
+  if(List.length inp > 0) then
+  toStringList (List.tl inp) (out @ [(snd (List.hd inp))])
+  else out
+
 let rec string_of_expr = function
-  | Assign(v, e) -> v ^ " = " ^ string_of_expr e
+  | Assign(v, e) -> if ((String.compare (fst (string_of_expr e)) "StrLiteral") == 0) then
+    "Assign", "char *" ^ v ^ " = " ^ snd (string_of_expr e)
+    else "Assign", v ^ " = " ^ snd (string_of_expr e)
   | Call(id, params) -> if (String.compare id "PRINT" == 0) then
-    "printf" ^ "(" ^ String.concat ", " (List.map string_of_expr params) ^ ")"
-    else id ^ "(" ^ String.concat ", " (List.map string_of_expr params) ^ ")"
-  | StrLiteral(l) -> l
-  | Id(s) -> s
-  | Noexpr -> ""
+    "Call", "printf" ^ "(" ^ String.concat ", " (toStringList (List.map string_of_expr params) []) ^ ")"
+    else "Call", id ^ "(" ^ String.concat ", " (toStringList (List.map string_of_expr params) []) ^ ")"
+  | StrLiteral(l) -> "StrLiteral", l
+  | Id(s) -> "Id", s
+  | Noexpr -> "Noexpr", ""
 
 let rec string_of_stmnt expr =
-  string_of_expr expr ^ ";\n"
+  snd (string_of_expr expr) ^ ";\n"
 
 let rec translateProgram = function
   | [] -> ""
