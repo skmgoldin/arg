@@ -4,7 +4,9 @@ let file = "helloworld.arg"
 
 let rec string_of_expr = function
   | Assign(v, e) -> v ^ " = " ^ string_of_expr e
-  | Call(id, params) -> id ^ "(" ^ String.concat ", " (List.map string_of_expr params) ^ ")"
+  | Call(id, params) -> if (String.compare id "PRINT" == 0) then
+    "printf" ^ "(" ^ String.concat ", " (List.map string_of_expr params) ^ ")"
+    else id ^ "(" ^ String.concat ", " (List.map string_of_expr params) ^ ")"
   | StrLiteral(l) -> l
   | Id(s) -> s
   | Noexpr -> ""
