@@ -1,6 +1,8 @@
 open Ast
+open Str
 
-let file = "helloworld.arg"
+let arg_file = Sys.argv.(1) ^ ".arg"
+let c_file = Sys.argv.(1) ^ ".c"
 
 let rec toStringList inp out =
   if(List.length inp > 0)
@@ -28,8 +30,19 @@ let rec translateProgram = function
   | [] -> ""
   | stmnt :: tl -> (string_of_stmnt stmnt) ^ translateProgram tl
 
+let indent line = "\t" ^ line
+
+let wrapProgram p =
+  let lines = List.map indent (Str.split (Str.regexp "\n") p) in
+  let body = List.fold_left (fun x y -> x ^ "\n" ^ y) "" lines in
+  "#include <stdio.h>\n\nint main() {" ^ body ^ "\n\n\treturn 0;\n}\n"
+
 let _ =
-  let ic = open_in file in
+  let ic = open_in arg_file in
   let lexbuf = Lexing.from_channel ic in
   let program = Parser.program Scanner.token lexbuf in
-  print_endline (translateProgram program)
+  let oc = open_out c_file in
+  Printf.fprintf oc "%s\n" (wrapProgram (translateProgram program));
+  print_endline ("generated " ^ c_file);
+  close_out oc;
+  close_in ic;
