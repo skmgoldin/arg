@@ -1,5 +1,5 @@
 open Ast
-open Str
+(* open Str *)
 
 let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
@@ -30,9 +30,9 @@ let rec translateProgram = function
   | [] -> ""
   | stmnt :: tl -> (string_of_stmnt stmnt) ^ translateProgram tl
 
-let indent line = "\t" ^ line
-
+(* wraps code in main function, with includes *)
 let wrapProgram p =
+  let indent line = "\t" ^ line in
   let lines = List.map indent (Str.split (Str.regexp "\n") p) in
   let body = List.fold_left (fun x y -> x ^ "\n" ^ y) "" lines in
   "#include <stdio.h>\n\nint main() {" ^ body ^ "\n\n\treturn 0;\n}\n"
