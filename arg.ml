@@ -1,6 +1,6 @@
 open Ast
 
-type types =
+type concreteType =
   | String of string
 
 module SymTable = Map.Make (String)
@@ -13,16 +13,16 @@ let rec toStringList inp out =
   else out
 
 (* This is a fat TODO. Assume string for now because it's all we support. *)
-let evalCall id params = String("IMPLEMENT EVALCALL")
+let typeOfCall id params = String("IMPLEMENT EVALCALL")
 
 (* Get the evaluated type of an expression. *)
 let rec typeOfExpr e symTable =
   match e with
   | Assign(v, e) -> typeOfExpr(e)
-  | Call(id, params) -> evalCall(id, params)
-  | Id(s) -> if SymTable.is_empty symTable then raise Exit
+  | Call(id, params) -> typeOfCall(id, params)
+  | Id(s) -> fun s -> if SymTable.is_empty symTable then raise Exit
                                            else SymTable.find s symTable
-  | Noexpr ->  raise Exit (* WTF do we do about this? Raise an exception? *)
+  | Noexpr ->  raise Exit
   | StrLiteral(l) -> String(l)
 
 (* Returns a pair. The first element is a C string, the second is the symbol table
