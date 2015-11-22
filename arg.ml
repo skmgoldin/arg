@@ -13,7 +13,7 @@ let rec toStringList inp out =
   else out
 
 (* This is a fat TODO. Assume string for now because it's all we support. *)
-let evalCall id params = String("hi")
+let evalCall id params = String("IMPLEMENT EVALCALL")
 
 let rec typeOfExpr e symTable =
   match e with
