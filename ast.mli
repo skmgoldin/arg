@@ -1,8 +1,8 @@
 type expr =
-  | StrLiteral of string
-  | Id of string
   | Assign of string * expr
   | Call of string * expr list
+  | Id of string
   | Noexpr
+  | StrLiteral of string
 
 type program = expr list
