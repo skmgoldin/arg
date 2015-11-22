@@ -1,7 +1,7 @@
 open Ast
 
 type concreteType =
-  | String of string
+  | CString of string
 
 module SymTable = Map.Make (String)
 let arg_file = Sys.argv.(1) ^ ".arg"
@@ -13,17 +13,16 @@ let rec toStringList inp out =
   else out
 
 (* This is a fat TODO. Assume string for now because it's all we support. *)
-let typeOfCall id params = String("IMPLEMENT EVALCALL")
+let typeOfCall id params = CString("IMPLEMENT EVALCALL")
 
 (* Get the evaluated type of an expression. *)
 let rec typeOfExpr e symTable =
   match e with
   | Assign(v, e) -> typeOfExpr(e)
   | Call(id, params) -> typeOfCall(id, params)
-  | Id(s) -> fun s -> if SymTable.is_empty symTable then raise Exit
-                                           else SymTable.find s symTable
+  | Id(s) -> if SymTable.is_empty symTable then raise Exit else SymTable.find s symTable
   | Noexpr ->  raise Exit
-  | StrLiteral(l) -> String(l)
+  | StrLiteral(l) -> CString(l)
 
 (* Returns a pair. The first element is a C string, the second is the symbol table
    in its proper state following the statement in the first element. *)
