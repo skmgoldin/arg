@@ -56,12 +56,19 @@ let rec typeOfExpr e symTable =
     }
   | Assign(v, e) -> typeOfExpr e symTable
 
+let decTypeStr monotype =
+  if monotype.isint = true then "int" else 
+  if monotype.isstring = true then "char *" else 
+  if monotype.isbool = true then "int" else 
+  if monotype.isfloat = true then "float" else raise Exit
+
 (* Returns a pair. The first element is a C string, the second is the symbol table
    in its proper state following the statement in the first element. *)
 let rec string_of_expr expr symTable =
   match expr with
   | Assign(v, e) ->
     let symTable = SymTable.add v (typeOfExpr e symTable) symTable in
+    (* decPrefixStr: the C prefix of the var declaration, ie "char *" or "int" *)
     let decPrefixStr = decTypeStr (SymTable.find v symTable) in
     (decPrefixStr ^ v ^ " = " ^ fst (string_of_expr e symTable), symTable)
   (* Below this line is TODO *)
