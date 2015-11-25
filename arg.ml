@@ -1,7 +1,55 @@
 open Ast
 
+type monotype =
+{
+  isint: bool;
+  i: int;
+
+  isstring: bool;
+  s: string;
+
+  isbool: bool;
+  b: bool;
+
+  isfloat: bool;
+  f: float;
+}
+
+let emptyMonoType =
+{
+  isint = false;
+  i = 0;
+
+  isstring = false;
+  s = "";
+
+  isbool = false;
+  b = false;
+
+  isfloat = false;
+  f = 0.0;
+}
+
+let cstring = 
+{
+  isint = false;
+  i = 0;
+
+  isstring = true;
+  s = "";
+
+  isbool = false;
+  b = false;
+
+  isfloat = false;
+  f = 0.0;
+}
+  
 type concreteType =
-  | CString of string
+  | CInt of monotype
+  | CString of monotype
+  | CBool of monotype
+  | CFloat of monotype 
 
 module SymTable = Map.Make (String)
 let arg_file = Sys.argv.(1) ^ ".arg"
@@ -12,17 +60,27 @@ let rec toStringList inp out =
   then toStringList (List.tl inp) (out @ [(snd (List.hd inp))])
   else out
 
-(* This is a fat TODO. Assume string for now because it's all we support. *)
-let typeOfCall id params = CString("IMPLEMENT EVALCALL")
-
 (* Get the evaluated type of an expression. *)
 let rec typeOfExpr e symTable =
   match e with
-  | Assign(v, e) -> typeOfExpr(e)
-  | Call(id, params) -> typeOfCall(id, params)
+  | Call(id, params) -> emptyMonoType
   | Id(s) -> if SymTable.is_empty symTable then raise Exit else SymTable.find s symTable
   | Noexpr ->  raise Exit
-  | StrLiteral(l) -> CString(l)
+  | StrLiteral(l) ->
+    {
+      isint = false;
+      i = 0;
+
+      isstring = true;
+      s = l;
+
+      isbool = false;
+      b = false;
+
+      isfloat = false;
+      f = 0.0;
+    }
+  | Assign(v, e) -> typeOfExpr e symTable
 
 (* Returns a pair. The first element is a C string, the second is the symbol table
    in its proper state following the statement in the first element. *)
