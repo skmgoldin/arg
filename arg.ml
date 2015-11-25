@@ -1,5 +1,9 @@
 open Ast
 
+module SymTable = Map.Make (String)
+let arg_file = Sys.argv.(1) ^ ".arg"
+let c_file = Sys.argv.(1) ^ ".c"
+
 type monotype =
 {
   isint: bool;
@@ -29,36 +33,6 @@ let emptyMonoType =
   isfloat = false;
   f = 0.0;
 }
-
-let cstring = 
-{
-  isint = false;
-  i = 0;
-
-  isstring = true;
-  s = "";
-
-  isbool = false;
-  b = false;
-
-  isfloat = false;
-  f = 0.0;
-}
-  
-type concreteType =
-  | CInt of monotype
-  | CString of monotype
-  | CBool of monotype
-  | CFloat of monotype 
-
-module SymTable = Map.Make (String)
-let arg_file = Sys.argv.(1) ^ ".arg"
-let c_file = Sys.argv.(1) ^ ".c"
-
-let rec toStringList inp out =
-  if(List.length inp > 0)
-  then toStringList (List.tl inp) (out @ [(snd (List.hd inp))])
-  else out
 
 (* Get the evaluated type of an expression. *)
 let rec typeOfExpr e symTable =
