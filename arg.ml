@@ -43,7 +43,18 @@ let emptyMonoType =
 }
 *)
 
+let rec string_of_expr_list l =
+  c_of_expr (List.hd l) ^ ", " ^ string_of_expr_list (List.tl l)
+
+let rec literal_to_monotype = function
+  | Call(id, params) -> id ^ "(" ^ string_of_expr_list params ^ ");"
+  | Id(s) -> s ^ ";"
+  | Noexpr -> raise Exit
+  | StrLiteral(l) -> "new_monotype(1, 0, " ^ l ^ ", 0, 0.0);"
+  | Assign(v, e) -> v ^ " = " ^ literal_to_monotype e
+
 (* Get the evaluated type of an expression. *)
+(*
 let rec typeOfExpr e symTable =
   match e with
   | Call(id, params) -> monotype
@@ -64,8 +75,9 @@ let rec typeOfExpr e symTable =
       f = 0.0;
     }
   | Assign(v, e) -> typeOfExpr e symTable
+*)
 
-let decTypeStr monotype =
+let assignType monotype =
   if monotype.isint = true then "int" else
   if monotype.isstring = true then "char *" else
   if monotype.isbool = true then "int" else
@@ -76,10 +88,14 @@ let decTypeStr monotype =
 let rec c_of_expr expr symTable =
   match expr with
   | Assign(v, e) ->
-    let symTable = SymTable.add v (typeOfExpr e symTable) symTable in
-    (* decPrefixStr: the C prefix of the var declaration, ie "char *" or "int" *)
-    let decPrefixStr = decTypeStr (SymTable.find v symTable) in
-    (decPrefixStr ^ v ^ " = " ^ fst (c_of_expr e symTable), symTable)
+    if SymTable.find v symTable (* If v is already in the symtable *)
+    then let symTable = SymTable.add v v symTable in
+      let assignPrefix = "" in
+      (assignPrefixStr ^ v ^ " = " ^ fst (c_of_expr e symTable), symTable)
+    (* If v is not in the symtable already, we need to declare a new monotype *)
+    else let symTable = SymTable.add v v symTable in
+      let assignPrefixStr = assignType (typeOfExpr e symTable) in
+      ("struct monotype " ^ v ^ " = " ^ fst (c_of_expr e symTable), symTable)
   (* Below this line is TODO *)
   | Call(id, params) -> if (String.compare id "PRINT" == 0)
     then "Call", "printf" ^ "(" ^ String.concat ", " (toStringList
