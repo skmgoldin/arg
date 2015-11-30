@@ -65,38 +65,38 @@ let rec typeOfExpr e symTable =
   | Assign(v, e) -> typeOfExpr e symTable
 
 let decTypeStr monotype =
-  if monotype.isint = true then "int" else 
-  if monotype.isstring = true then "char *" else 
-  if monotype.isbool = true then "int" else 
+  if monotype.isint = true then "int" else
+  if monotype.isstring = true then "char *" else
+  if monotype.isbool = true then "int" else
   if monotype.isfloat = true then "float" else raise Exit
 
 (* Returns a pair. The first element is a C string, the second is the symbol table
    in its proper state following the statement in the first element. *)
-let rec string_of_expr expr symTable =
+let rec c_of_expr expr symTable =
   match expr with
   | Assign(v, e) ->
     let symTable = SymTable.add v (typeOfExpr e symTable) symTable in
     (* decPrefixStr: the C prefix of the var declaration, ie "char *" or "int" *)
     let decPrefixStr = decTypeStr (SymTable.find v symTable) in
-    (decPrefixStr ^ v ^ " = " ^ fst (string_of_expr e symTable), symTable)
+    (decPrefixStr ^ v ^ " = " ^ fst (c_of_expr e symTable), symTable)
   (* Below this line is TODO *)
   | Call(id, params) -> if (String.compare id "PRINT" == 0)
     then "Call", "printf" ^ "(" ^ String.concat ", " (toStringList
-         (List.map string_of_expr params) []) ^ ")"
+         (List.map c_of_expr params) []) ^ ")"
     else "Call", id ^ "(" ^ String.concat ", " (toStringList
-         (List.map string_of_expr params) []) ^ ")"
+         (List.map c_of_expr params) []) ^ ")"
   | StrLiteral(l) -> "StrLiteral", l
   | Id(s) -> "Id", s
   | Noexpr -> "Noexpr", ""
 
-let rec string_of_stmnt expr symTable =
-  (fst (string_of_expr expr symTable) ^ ";\n", snd (string_of_expr expr symTable))
+let rec c_of_stmnt expr symTable =
+  (fst (c_of_expr expr symTable) ^ ";\n", snd (c_of_expr expr symTable))
 
-let rec translateProgram program symTable =
-  match program with
-  | [] -> ""
-  | stmnt :: tl -> fst (string_of_stmnt stmnt symTable) ^
-                   translateProgram tl (snd (string_of_stmnt stmnt symTable))
+(* returns tuple of C code -- first elem is main body, second elem is function defs *)
+let rec translateProgram symTable = function
+  | [] -> ("", "")
+  | stmnt :: tl -> (fst (c_of_stmnt stmnt symTable) ^
+                   translateProgram tl (snd (c_of_stmnt stmnt symTable)), "")
 
 (* wraps code in main function, with includes *)
 let wrapProgram p =
