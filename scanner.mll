@@ -8,6 +8,7 @@ rule token = parse
 | ','       { COMMA }
 | ';'       { SEMI }
 | '='       { ASSIGN }
+| 'FUNCTION'    { FUNCTION }
 | '"'[^'\n']*'"' as lxm { STRLITERAL(lxm) }
 | ['A'-'Z' 'a'-'z']['A'-'Z' 'a'-'z' '0'-'9' '_']* as lxm { ID(lxm) }
 | eof       { EOF }

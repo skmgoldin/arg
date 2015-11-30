@@ -1,5 +1,6 @@
 open Ast
 
+(*
 module SymTable = Map.Make (String)
 let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
@@ -92,26 +93,42 @@ let rec c_of_expr expr symTable =
 let rec c_of_stmnt expr symTable =
   (fst (c_of_expr expr symTable) ^ ";\n", snd (c_of_expr expr symTable))
 
+let divide_functions arg =
+  ;
+
 (* returns tuple of C code -- first elem is main body, second elem is function defs *)
+(*
 let rec translateProgram symTable = function
   | [] -> ("", "")
   | stmnt :: tl -> (fst (c_of_stmnt stmnt symTable) ^
                    translateProgram tl (snd (c_of_stmnt stmnt symTable)), "")
+*)
+let translateProgram arg =
+  let arg_functions, arg_body = divide_functions arg in
+  (translate_functions arg_functions, translate_body arg_body)
 
 (* wraps code in main function, with includes *)
-let wrapProgram p =
-  let indent line = "\t" ^ line in
-  let lines = List.map indent (Str.split (Str.regexp "\n") p) in
-  let body = List.fold_left (fun x y -> x ^ "\n" ^ y) "" lines in
-  "#include <stdio.h>\n\nint main() {" ^ body ^ "\n\n\treturn 0;\n}\n"
+let wrapProgram functions body =
+  "#include <stdio.h>\n\n" ^ functions ^ "\n\nint main() {" ^ body ^ "\n\n\treturn 0;\n}\n"
+
 
 let _ =
   let ic = open_in arg_file in
   let lexbuf = Lexing.from_channel ic in
-  let program = Parser.program Scanner.token lexbuf in
+  let arg = Parser.program Scanner.token lexbuf in
   let oc = open_out c_file in
-  let symTable = SymTable.empty in
-  Printf.fprintf oc "%s\n" (wrapProgram (translateProgram program symTable));
+  Printf.fprintf oc "%s\n" (wrapProgram (translateProgram arg));
   print_endline ("generated " ^ c_file);
+  close_out oc;
+  close_in ic;
+
+*)
+
+let _ =
+  let ic = open_in arg_file in
+  let lexbuf = Lexing.from_channel ic in
+  let arg = Parser.program Scanner.token lexbuf in
+  let oc = open_out c_file in
+  print_endline ("done");
   close_out oc;
   close_in ic;

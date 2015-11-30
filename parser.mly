@@ -3,6 +3,7 @@
 %token COMMA SEMI
 %token LPAREN RPAREN
 %token ASSIGN
+%token FUNCTION
 %token <string> STRLITERAL
 %token <string> ID
 %token EOF
@@ -15,25 +16,43 @@
 %%
 
 program:
-  code EOF                             { List.rev $1 }
+  code EOF                             { $1 }
 
 code:
-  | /* Nothing */                      { [] }
-  | code statement                     { $2 :: $1 }
+  | functions body                     { ($1, $2) }
+
+body:
+  | /* nothing */                      { [] }
+  | body statement                     { $1 :: $2 }
+
+functions:
+  | /* nothing */                     { [] }
+  | functions function                { $1 :: $2 }
+
+function:
+  | FUNCTION ID LPAREN params_opt RPAREN       { }
 
 statement:
-  | expr SEMI                          { $1 }
+  | expr SEMI                          { Expr($1) }
 
 expr:
   | ID ASSIGN expr                     { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN       { Call($1, $3) }
   | STRLITERAL                         { StrLiteral($1) }
-  | ID                                 { Id($1) } 
+  | ID                                 { Id($1) }
 
 actuals_opt:
   | /* Nothing */                      { [] }
-  | actuals_list                       { List.rev $1 }
+  | actuals_list                       { $1 }
 
 actuals_list:
   | expr                               { [$1] }
-  | actuals_list COMMA expr            { $3 :: $1 }
+  | actuals_list COMMA expr            { $1 :: $3 }
+
+params_opt:
+  | /* nothing */                     { [] }
+  | params_list                       { $1 }
+
+params_list:
+  | ID                                { [$1] }
+  | params_list COMMA ID              { $1 :: $3 }
