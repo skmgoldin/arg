@@ -29,14 +29,28 @@ monotype rando(a, b, c) {
     throw exception;
 
   if(a == 5)
-    return new_monotype(1, b)
+    if(b.isint) {
+      return new_monotype(0, b.i)
+    } else if(b.ischar) {
+      return new_monotype(1, b.s)
+    } else if(b.isbool) {
+      return new_monotype(2, b.b)
+    } else if(b.isdouble) {
+      return new_monotype(3, b.d)
+    }
   else
-    return new_monotype(2, c)
-
+    if(c.isint) {
+      return new_monotype(0, c.i)
+    } else if(c.ischar) {
+      return new_monotype(1, c.s)
+    } else if(c.isbool) {
+      return new_monotype(2, c.b)
+    } else if(c.isdouble) {
+      return new_monotype(3, c.d)
+    }
 }
 
 monotype d = rando(a, b, c);
 
 monotype e = rando(d, b, c);
-
 

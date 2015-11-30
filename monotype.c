@@ -10,22 +10,11 @@ struct monotype {
   
   int isdouble;
   double d;
-}
+};
 
-/* ARG */
-// a = 10;
-// b = "hi";
-
-static int main(int argc, char **argv)
+struct monotype new_monotype(int flag, int i, char *s, int b, double d)
 {
-	/* An integer */
-	monotype a = new_monotype(0, 10, "", 0, 0.0);
-	monotype b = new_monotype(1, 0, "hi", 0, 0.0);
-}
-
-monotype new_monotype(int flag, int i, char *s, int b, double d)
-{
-	monotype nm;
+	struct monotype nm;
 
 	if(flag == 0) {
 		nm.i = i;
