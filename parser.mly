@@ -35,6 +35,8 @@ function:
 statement:
   | expr SEMI                          { Expr($1) }
 
+loop:
+
 expr:
   | ID ASSIGN expr                     { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN       { Call($1, $3) }
