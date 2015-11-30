@@ -1,0 +1,42 @@
+a = (int) argv[1];
+b = "yo";
+c = 420;
+b = c;
+d = rando(a, b, c);
+
+FUNCTION rando(a, b, c) {
+
+  if(a == 5) {
+    return b;
+  } else {
+    return c;
+  }
+
+}
+
+PRINT("%x\n", d);
+
+----------------------------
+
+monotype a = new_monotype(0, atoi(argv[1]));
+monotype b = new_monotype(1, "yo");
+monotype c = new_monotype(0, 420);
+b = c;
+
+monotype rando(a, b, c) {
+
+  if(!a.isint)
+    throw exception;
+
+  if(a == 5)
+    return new_monotype(1, b)
+  else
+    return new_monotype(2, c)
+
+}
+
+monotype d = rando(a, b, c);
+
+monotype e = rando(d, b, c);
+
+
