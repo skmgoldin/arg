@@ -11,38 +11,6 @@ type monotype =
   | Boolean of bool
   | Float of float
 
-(*
-type monotype =
-{
-  isint: bool;
-  i: int;
-
-  isstring: bool;
-  s: string;
-
-  isbool: bool;
-  b: bool;
-
-  isfloat: bool;
-  f: float;
-}
-
-let emptyMonoType =
-{
-  isint = false;
-  i = 0;
-
-  isstring = false;
-  s = "";
-
-  isbool = false;
-  b = false;
-
-  isfloat = false;
-  f = 0.0;
-}
-*)
-
 let rec string_of_expr_list l =
   c_of_expr (List.hd l) ^ ", " ^ string_of_expr_list (List.tl l)
 
@@ -52,30 +20,6 @@ let rec literal_to_monotype = function
   | Noexpr -> raise Exit
   | StrLiteral(l) -> "new_monotype(1, 0, " ^ l ^ ", 0, 0.0);"
   | Assign(v, e) -> v ^ " = " ^ literal_to_monotype e
-
-(* Get the evaluated type of an expression. *)
-(*
-let rec typeOfExpr e symTable =
-  match e with
-  | Call(id, params) -> monotype
-  | Id(s) -> if SymTable.is_empty symTable then raise Exit else SymTable.find s symTable
-  | Noexpr ->  raise Exit
-  | StrLiteral(l) ->
-    {
-      isint = false;
-      i = 0;
-
-      isstring = true;
-      s = l;
-
-      isbool = false;
-      b = false;
-
-      isfloat = false;
-      f = 0.0;
-    }
-  | Assign(v, e) -> typeOfExpr e symTable
-*)
 
 let assignType monotype =
   if monotype.isint = true then "int" else
