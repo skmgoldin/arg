@@ -5,6 +5,13 @@ let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
 
 type monotype =
+  | Integer of int
+  | String of string
+  | Boolean of bool
+  | Float of float
+
+(*
+type monotype =
 {
   isint: bool;
   i: int;
@@ -33,11 +40,12 @@ let emptyMonoType =
   isfloat = false;
   f = 0.0;
 }
+*)
 
 (* Get the evaluated type of an expression. *)
 let rec typeOfExpr e symTable =
   match e with
-  | Call(id, params) -> emptyMonoType
+  | Call(id, params) -> monotype
   | Id(s) -> if SymTable.is_empty symTable then raise Exit else SymTable.find s symTable
   | Noexpr ->  raise Exit
   | StrLiteral(l) ->
