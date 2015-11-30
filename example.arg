@@ -1,8 +1,8 @@
 a = (int) argv[1];
 b = "yo";
 c = 420;
-b = c;
 d = rando(a, b, c);
+e = rando(a, b, c);
 
 FUNCTION rando(a, b, c) {
 
@@ -15,42 +15,3 @@ FUNCTION rando(a, b, c) {
 }
 
 PRINT("%x\n", d);
-
-----------------------------
-
-monotype a = new_monotype(0, atoi(argv[1]));
-monotype b = new_monotype(1, "yo");
-monotype c = new_monotype(0, 420);
-b = c;
-
-monotype rando(a, b, c) {
-
-  if(!a.isint)
-    throw exception;
-
-  if(a == 5)
-    if(b.isint) {
-      return new_monotype(0, b.i)
-    } else if(b.ischar) {
-      return new_monotype(1, b.s)
-    } else if(b.isbool) {
-      return new_monotype(2, b.b)
-    } else if(b.isdouble) {
-      return new_monotype(3, b.d)
-    }
-  else
-    if(c.isint) {
-      return new_monotype(0, c.i)
-    } else if(c.ischar) {
-      return new_monotype(1, c.s)
-    } else if(c.isbool) {
-      return new_monotype(2, c.b)
-    } else if(c.isdouble) {
-      return new_monotype(3, c.d)
-    }
-}
-
-monotype d = rando(a, b, c);
-
-monotype e = rando(d, b, c);
-
