@@ -3,7 +3,6 @@ open Ast
 let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
 
-(*
 module SymTable = Map.Make (String)
 type monotype =
   | Integer of int
@@ -82,13 +81,3 @@ let _ =
   close_out oc;
   close_in ic;
 
-*)
-
-let _ =
-  let ic = open_in arg_file in
-  let lexbuf = Lexing.from_channel ic in
-  let arg = Parser.program Scanner.token lexbuf in
-  let oc = open_out c_file in
-  print_endline ("done");
-  close_out oc;
-  close_in ic;
