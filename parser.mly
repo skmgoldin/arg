@@ -27,9 +27,9 @@ body:
 
 functions:
   | /* nothing */                     { [] }
-  | functions function                { $1 :: $2 }
+  | functions func                    { $1 :: $2 }
 
-function:
+func:
   | FUNCTION ID LPAREN params_opt RPAREN       { }
 
 statement:
