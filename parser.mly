@@ -3,7 +3,7 @@
 %token COMMA SEMI
 %token LPAREN RPAREN
 %token ASSIGN
-%token FUNCTION
+%token FUNCTION WHILE
 %token <string> STRLITERAL
 %token <string> ID
 %token EOF
