@@ -15,7 +15,6 @@ type statement =
 type func = {
   fname : string;
   formals : string list;
-  locals : string list;
   body : statement list;
 }
 
