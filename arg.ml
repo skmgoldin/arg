@@ -56,6 +56,14 @@ let rec c_of_stmnt expr sym_table =
 *)
 (* END DEATH ZONE *)
 
+let arg_expr_to_c_expr arg_expr = function
+  | Assign(str, e) -> ""
+  | Call(str, el) -> ""
+  | Id(str) -> ""
+  | StrLiteral(str) -> ""
+  | Binop(e1, op, e2) -> ""
+  | Noexpr -> raise Exit
+
 (* Route an arg statement to its translator and return a string. *)
 let arg_stmt_to_c_stmt = function
   | Expr(e) -> arg_expr_to_c_expr e
