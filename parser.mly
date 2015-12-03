@@ -2,6 +2,7 @@
 
 %token COMMA SEMI
 %token LPAREN RPAREN
+%token LBRACE RBRACE
 %token ASSIGN
 %token FUNCTION WHILE
 %token <string> STRLITERAL
@@ -30,7 +31,11 @@ functions:
   | functions func                    { List.rev ($2 :: $1) }
 
 func:
-  | FUNCTION ID LPAREN params_opt RPAREN       { }
+  | FUNCTION ID LPAREN params_opt RPAREN LBRACE func_body RBRACE     { }
+
+func_body:
+  | /* nothing */                      { [] }
+  | body statement                     { List.rev ($2 :: $1) }
 
 statement:
   | expr SEMI                          { Expr($1) }
