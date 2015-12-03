@@ -23,11 +23,11 @@ code:
 
 body:
   | /* nothing */                      { [] }
-  | body statement                     { $1 :: $2 }
+  | body statement                     { List.rev ($2 :: $1) }
 
 functions:
   | /* nothing */                     { [] }
-  | functions func                    { $1 :: $2 }
+  | functions func                    { List.rev ($2 :: $1) }
 
 func:
   | FUNCTION ID LPAREN params_opt RPAREN       { }
