@@ -91,6 +91,7 @@ let arg_stmt_to_c_stmt = function
     | Binop(e1, op, e2) -> ""
     | Noexpr -> raise Exit
 
+(* Convert a list of arg statements to a string of C statements *)
 let arg_body_to_c_body arg_body =
   "THE BODY"
 
