@@ -59,8 +59,11 @@ let rec c_of_stmnt expr sym_table =
 (* Route the functions and body segments of the program pair to their respective
    handlers and return the result as a pair of strings. *)
 let translate_program arg =
-  let arg_functions, arg_body = divide_functions arg in
-  (translate_functions arg_functions, translate_body arg_body)
+  let arg_funcs = fst arg in
+  let arg_body = snd arg in
+  let c_funcs = arg_funcs_to_c_funcs arg_funcs in
+  let c_body = arg_body_to_c_body arg_body in
+  (c_funcs, c_body)
 
 (* Include necessary C libraries. Declare functions at top of file, then wrap
    body in a main function below.*)
