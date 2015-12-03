@@ -2,8 +2,8 @@ open Ast
 
 let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
-
 module SymTable = Map.Make (String)
+
 type monotype =
   | Integer of int
   | String of string
@@ -52,24 +52,16 @@ let rec c_of_expr expr sym_table =
 let rec c_of_stmnt expr sym_table =
   (fst (c_of_expr expr sym_table) ^ ";\n", snd (c_of_expr expr sym_table))
 
-let divide_functions arg =
-  ;
-
-(* returns tuple of C code -- first elem is main body, second elem is function defs *)
-(*
-let rec translate_program sym_table = function
-  | [] -> ("", "")
-  | stmnt :: tl -> (fst (c_of_stmnt stmnt sym_table) ^
-                   translate_program tl (snd (c_of_stmnt stmnt sym_table)), "")
-*)
+(* Route the functions and body segments of the program pair to their respective
+   handlers and return the result as a pair of strings. *)
 let translate_program arg =
   let arg_functions, arg_body = divide_functions arg in
   (translate_functions arg_functions, translate_body arg_body)
 
-(* wraps code in main function, with includes *)
+(* Include necessary C libraries. Declare functions at top of file, then wrap
+   body in a main function below.*)
 let wrap_program functions body =
   "#include <stdio.h>\n\n" ^ functions ^ "\n\nint main() {" ^ body ^ "\n\n\treturn 0;\n}\n"
-
 
 let _ =
   let ic = open_in arg_file in
