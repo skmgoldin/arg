@@ -57,8 +57,7 @@ let rec c_of_stmnt expr sym_table =
 *)
 (* ### END DEATH ZONE ## *)
 
-(* ### BUG 0 ### *)
-let arg_expr_to_c_expr arg_expr = function
+let arg_expr_to_c_expr = function
   | Assign(str, e) -> ""
   | Call(str, el) -> ""
   | Id(str) -> ""
@@ -66,32 +65,12 @@ let arg_expr_to_c_expr arg_expr = function
   | Binop(e1, op, e2) -> ""
   | Noexpr -> raise Exit
 
+(* Route an arg statement to its translator and return a string. *)
 let rec arg_stmt_to_c_stmt = function
   | Expr(e) -> arg_expr_to_c_expr e
   | While(e, s) -> let cond = arg_expr_to_c_expr e in
                    let loop_body = arg_stmt_to_c_stmt s in
                    "while(" ^ cond ^ ") {\n" ^ loop_body ^ "\n}"
-(* ### END BUG 0 ### *)
-
-(*
-(* Route an arg statement to its translator and return a string.
-   IMPORTANT: we obviously want to evaluate expressions from a single
-   function, but I couldn't make the types between the While and Expr patterns
-   agree when I had the Expr pattern matching broken out into its own function.
-   This NEEDS TO BE RESOLVED. We can't write an expr translator in two places.
-   I have a feeling the solution is trivial and I'm just not seeing it. See
-   comment block "BUG 0" for the solution as it *should* be. Uncomment it and
-   try to make it work. Also see: https://piazza.com/class/ieoq9g8tkv749m *)
-let arg_stmt_to_c_stmt = function
-  | While(e, s) -> ""
-  | Expr(e) -> match e with
-    | Assign(str, e) -> ""
-    | Call(str, el) -> ""
-    | Id(str) -> ""
-    | StrLiteral(str) -> ""
-    | Binop(e1, op, e2) -> ""
-    | Noexpr -> raise Exit
-*)
 
 (* Convert a list of arg statements to a string of C statements *)
 let arg_body_to_c_body arg_body =
