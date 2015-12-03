@@ -31,7 +31,12 @@ functions:
   | functions func                    { List.rev ($2 :: $1) }
 
 func:
-  | FUNCTION ID LPAREN params_opt RPAREN LBRACE func_body RBRACE     { }
+  | FUNCTION ID LPAREN params_opt RPAREN LBRACE func_body RBRACE
+    {
+      { fname = $2;
+        formals = $4;
+        body = $7; } 
+    }
 
 func_body:
   | /* nothing */                      { [] }
@@ -53,7 +58,7 @@ actuals_opt:
 
 actuals_list:
   | expr                               { [$1] }
-  | actuals_list COMMA expr            { $1 :: $3 }
+  | actuals_list COMMA expr            { List.rev ($3 :: $1) }
 
 params_opt:
   | /* nothing */                     { [] }
@@ -61,4 +66,4 @@ params_opt:
 
 params_list:
   | ID                                { [$1] }
-  | params_list COMMA ID              { $1 :: $3 }
+  | params_list COMMA ID              { List.rev ($3 :: $1) }
