@@ -17,8 +17,6 @@ let assign_type monotype =
   if monotype.isstring = true then "char *" else
   if monotype.isbool = true then "int" else
   if monotype.isfloat = true then "float" else raise Exit
-*)
-(* END DEATH ZONE *)
 
 (* Returns a pair. The first element is a C string, the second is the symbol table
    in its proper state following the statement in the first element. *)
@@ -55,19 +53,29 @@ let rec literal_to_monotype = function
 
 let rec c_of_stmnt expr sym_table =
   (fst (c_of_expr expr sym_table) ^ ";\n", snd (c_of_expr expr sym_table))
+*)
+(* END DEATH ZONE *)
+
+let arg_body_to_c_body arg_body =
+  "THE BODY"
+
+let arg_func_to_c_func arg_func =
+  "monotype " ^ arg_func.fname ^ "("
 
 (* Route the functions and body segments of the program pair to their respective
    handlers and return the result as a pair of strings. *)
 let translate_program arg =
   let arg_funcs = fst arg in
   let arg_body = snd arg in
-  let c_funcs = arg_funcs_to_c_funcs arg_funcs in
+  let c_funcs = List.map arg_func_to_c_func arg_funcs in
   let c_body = arg_body_to_c_body arg_body in
-  (c_funcs, c_body)
+  (List.fold_left (fun a b -> a ^ b) "" c_funcs, c_body)
 
 (* Include necessary C libraries. Declare functions at top of file, then wrap
    body in a main function below.*)
-let wrap_program functions body =
+let wrap_program translated_program =
+  let functions = fst translated_program in
+  let body = snd translated_program in
   "#include <stdio.h>\n\n" ^ functions ^ "\n\nint main() {" ^ body ^ "\n\n\treturn 0;\n}\n"
 
 let _ =
