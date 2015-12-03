@@ -20,7 +20,7 @@ let rec literal_to_monotype = function
   | StrLiteral(l) -> "new_monotype(1, 0, " ^ l ^ ", 0, 0.0);"
   | Assign(v, e) -> v ^ " = " ^ literal_to_monotype e
 
-let assignType monotype =
+let assign_type monotype =
   if monotype.isint = true then "int" else
   if monotype.isstring = true then "char *" else
   if monotype.isbool = true then "int" else
@@ -28,46 +28,46 @@ let assignType monotype =
 
 (* Returns a pair. The first element is a C string, the second is the symbol table
    in its proper state following the statement in the first element. *)
-let rec c_of_expr expr symTable =
+let rec c_of_expr expr sym_table =
   match expr with
   | Assign(v, e) ->
-    if SymTable.find v symTable (* If v is already in the symtable *)
-    then let symTable = SymTable.add v v symTable in
+    if SymTable.find v sym_table (* If v is already in the symtable *)
+    then let sym_table = SymTable.add v v sym_table in
       let assignPrefix = "" in
-      (assignPrefixStr ^ v ^ " = " ^ fst (c_of_expr e symTable), symTable)
+      (assignPrefixStr ^ v ^ " = " ^ fst (c_of_expr e sym_table), sym_table)
     (* If v is not in the symtable already, we need to declare a new monotype *)
-    else let symTable = SymTable.add v v symTable in
-      let assignPrefixStr = assignType (typeOfExpr e symTable) in
-      ("struct monotype " ^ v ^ " = " ^ fst (c_of_expr e symTable), symTable)
+    else let sym_table = SymTable.add v v sym_table in
+      let assignPrefixStr = assign_type (typeOfExpr e sym_table) in
+      ("struct monotype " ^ v ^ " = " ^ fst (c_of_expr e sym_table), sym_table)
   (* Below this line is TODO *)
   | Call(id, params) -> if (String.compare id "PRINT" == 0)
-    then "Call", "printf" ^ "(" ^ String.concat ", " (toStringList
+    then "Call", "printf" ^ "(" ^ String.concat ", " (to_string_list
          (List.map c_of_expr params) []) ^ ")"
-    else "Call", id ^ "(" ^ String.concat ", " (toStringList
+    else "Call", id ^ "(" ^ String.concat ", " (to_string_list
          (List.map c_of_expr params) []) ^ ")"
   | StrLiteral(l) -> "StrLiteral", l
   | Id(s) -> "Id", s
   | Noexpr -> "Noexpr", ""
 
-let rec c_of_stmnt expr symTable =
-  (fst (c_of_expr expr symTable) ^ ";\n", snd (c_of_expr expr symTable))
+let rec c_of_stmnt expr sym_table =
+  (fst (c_of_expr expr sym_table) ^ ";\n", snd (c_of_expr expr sym_table))
 
 let divide_functions arg =
   ;
 
 (* returns tuple of C code -- first elem is main body, second elem is function defs *)
 (*
-let rec translateProgram symTable = function
+let rec translate_program sym_table = function
   | [] -> ("", "")
-  | stmnt :: tl -> (fst (c_of_stmnt stmnt symTable) ^
-                   translateProgram tl (snd (c_of_stmnt stmnt symTable)), "")
+  | stmnt :: tl -> (fst (c_of_stmnt stmnt sym_table) ^
+                   translate_program tl (snd (c_of_stmnt stmnt sym_table)), "")
 *)
-let translateProgram arg =
+let translate_program arg =
   let arg_functions, arg_body = divide_functions arg in
   (translate_functions arg_functions, translate_body arg_body)
 
 (* wraps code in main function, with includes *)
-let wrapProgram functions body =
+let wrap_program functions body =
   "#include <stdio.h>\n\n" ^ functions ^ "\n\nint main() {" ^ body ^ "\n\n\treturn 0;\n}\n"
 
 
@@ -76,7 +76,7 @@ let _ =
   let lexbuf = Lexing.from_channel ic in
   let arg = Parser.program Scanner.token lexbuf in
   let oc = open_out c_file in
-  Printf.fprintf oc "%s\n" (wrapProgram (translateProgram arg));
+  Printf.fprintf oc "%s\n" (wrap_program (translate_program arg));
   print_endline ("generated " ^ c_file);
   close_out oc;
   close_in ic;
