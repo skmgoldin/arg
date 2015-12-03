@@ -69,12 +69,13 @@ let arg_expr_to_c_expr arg_expr = function
 
 let rec arg_stmt_to_c_stmt = function
   | Expr(e) -> arg_expr_to_c_expr e
-  | While(e, s) -> "while(" ^ arg_expr_to_c_expr e ^ ") {\n" ^
-                   arg_stmt_to_c_stmt s ^ "\n}"
+  | While(e, s) -> let cond = arg_expr_to_c_expr e in
+                   let loop_body = arg_stmt_to_c_stmt s in
+                   "while(" ^ cond ^ ") {\n" ^ loop_body ^ "\n}"
 *)
 
 (* Route an arg statement to its translator and return a string.
-   PROBLEMATIC: we obviously want to evaluate expressions from a single
+   IMPORTANT: we obviously want to evaluate expressions from a single
    function, but I couldn't make the types between the While and Expr patterns
    agree when I had the Expr pattern matching broken out into its own function.
    This NEEDS TO BE RESOLVED. We can't write an expr translator in two places.
