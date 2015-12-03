@@ -19,4 +19,4 @@ type func = {
   body : statement list;
 }
 
-type program = expr list
+type program = func list * statement list
