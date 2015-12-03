@@ -59,6 +59,7 @@ let rec c_of_stmnt expr sym_table =
 let arg_body_to_c_body arg_body =
   "THE BODY"
 
+(* Translate an arg function in the AST to a C function, returning a string. *)
 let arg_func_to_c_func arg_func =
   "monotype " ^ arg_func.fname ^ "(" ^
   List.fold_left (fun a b -> a ^ b ^ ", ") "" arg_func.formals ^ ") {\n" ^ 
