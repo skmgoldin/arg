@@ -1,10 +1,10 @@
 open Ast
 
-(*
-module SymTable = Map.Make (String)
 let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
 
+(*
+module SymTable = Map.Make (String)
 type monotype =
   | Integer of int
   | String of string
