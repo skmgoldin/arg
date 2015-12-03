@@ -34,8 +34,7 @@ function:
 
 statement:
   | expr SEMI                          { Expr($1) }
-
-loop:
+  | WHILE LPAREN expr RPAREN statement { While($3, $5) }
 
 expr:
   | ID ASSIGN expr                     { Assign($1, $3) }
