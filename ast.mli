@@ -12,6 +12,11 @@ type statement =
   | Expr of expr
   | While of expr * statement
 
-type func = string * Id list * statement list
+type func = {
+  fname : string;
+  formals : string list;
+  locals : string list;
+  body : statement list;
+}
 
 type program = expr list
