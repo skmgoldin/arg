@@ -55,7 +55,7 @@ let rec literal_to_monotype = function
 let rec c_of_stmnt expr sym_table =
   (fst (c_of_expr expr sym_table) ^ ";\n", snd (c_of_expr expr sym_table))
 *)
-(* END DEATH ZONE *)
+(* ### END DEATH ZONE ## *)
 
 (*
 (* ### BUG 0 ### *)
@@ -72,6 +72,7 @@ let rec arg_stmt_to_c_stmt = function
   | While(e, s) -> let cond = arg_expr_to_c_expr e in
                    let loop_body = arg_stmt_to_c_stmt s in
                    "while(" ^ cond ^ ") {\n" ^ loop_body ^ "\n}"
+(* ### END BUG 0 ### *)
 *)
 
 (* Route an arg statement to its translator and return a string.
@@ -80,7 +81,8 @@ let rec arg_stmt_to_c_stmt = function
    agree when I had the Expr pattern matching broken out into its own function.
    This NEEDS TO BE RESOLVED. We can't write an expr translator in two places.
    I have a feeling the solution is trivial and I'm just not seeing it. See
-   comment block "BUG 0" for the solution as it *should* be. *)
+   comment block "BUG 0" for the solution as it *should* be. Uncomment it and
+   try to make it work. *)
 let arg_stmt_to_c_stmt = function
   | While(e, s) -> ""
   | Expr(e) -> match e with
