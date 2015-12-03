@@ -4,7 +4,8 @@ let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
 module SymTable = Map.Make (String)
 
-(* THESE FUNCTIONS/TYPES MARKED FOR DEATH *)
+(* THESE FUNCTIONS/TYPES MARKED FOR DEATH. USE THEM FOR REFERENCE IF NEED BE,
+   BUT DON'T UNCOMMENT THEM. THEY ARE FROM THE OLD WORLD AND ARE UNCLEAN. *)
 (*
 type monotype =
   | Integer of int
@@ -56,6 +57,8 @@ let rec c_of_stmnt expr sym_table =
 *)
 (* END DEATH ZONE *)
 
+(* 
+(* ### BUG 0 ### *)
 let arg_expr_to_c_expr arg_expr = function
   | Assign(str, e) -> ""
   | Call(str, el) -> ""
@@ -64,10 +67,27 @@ let arg_expr_to_c_expr arg_expr = function
   | Binop(e1, op, e2) -> ""
   | Noexpr -> raise Exit
 
-(* Route an arg statement to its translator and return a string. *)
 let arg_stmt_to_c_stmt = function
   | Expr(e) -> arg_expr_to_c_expr e
-  | While(e, s) -> arg_while_to_c_while e s
+  | While(e, s) -> ""
+*)
+
+(* Route an arg statement to its translator and return a string.
+   PROBLEMATIC: we obviously want to evaluate expressions from a single
+   function, but I couldn't make the types between the While and Expr patterns
+   agree when I had the Expr pattern matching broken out into its own function.
+   This NEEDS TO BE RESOLVED. We can't write an expr translator in two places.
+   I have a feeling the solution is trivial and I'm just not seeing it. See
+   comment block "BUG 0" for the solution as it *should* be. *)
+let arg_stmt_to_c_stmt = function
+  | While(e, s) -> ""
+  | Expr(e) -> match e with
+    | Assign(str, e) -> ""
+    | Call(str, el) -> ""
+    | Id(str) -> ""
+    | StrLiteral(str) -> ""
+    | Binop(e1, op, e2) -> ""
+    | Noexpr -> raise Exit
 
 let arg_body_to_c_body arg_body =
   "THE BODY"
@@ -76,7 +96,8 @@ let arg_body_to_c_body arg_body =
 let arg_func_to_c_func arg_func =
   "monotype " ^ arg_func.fname ^ "(" ^
   List.fold_left (fun a b -> a ^ b ^ ", ") "" arg_func.formals ^ ") {\n" ^ 
-  arg_stmt_to_c_stmt arg_func.statement ^ "\n}"
+  List.fold_left (fun a b -> a ^ b ^ "\n") ""
+  (List.map arg_stmt_to_c_stmt arg_func.body) ^ "\n}"
 
 (* Route the functions and body segments of the program pair to their respective
    handlers and return the result as a pair of strings. *)
