@@ -57,7 +57,7 @@ let rec c_of_stmnt expr sym_table =
 *)
 (* END DEATH ZONE *)
 
-(* 
+(*
 (* ### BUG 0 ### *)
 let arg_expr_to_c_expr arg_expr = function
   | Assign(str, e) -> ""
@@ -67,9 +67,10 @@ let arg_expr_to_c_expr arg_expr = function
   | Binop(e1, op, e2) -> ""
   | Noexpr -> raise Exit
 
-let arg_stmt_to_c_stmt = function
+let rec arg_stmt_to_c_stmt = function
   | Expr(e) -> arg_expr_to_c_expr e
-  | While(e, s) -> ""
+  | While(e, s) -> "while(" ^ arg_expr_to_c_expr e ^ ") {\n" ^
+                   arg_stmt_to_c_stmt s ^ "\n}"
 *)
 
 (* Route an arg statement to its translator and return a string.
