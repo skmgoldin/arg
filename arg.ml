@@ -4,27 +4,21 @@ let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
 module SymTable = Map.Make (String)
 
+(* THESE FUNCTIONS/TYPES MARKED FOR DEATH *)
+(*
 type monotype =
   | Integer of int
   | String of string
   | Boolean of bool
   | Float of float
 
-let rec string_of_expr_list l =
-  c_of_expr (List.hd l) ^ ", " ^ string_of_expr_list (List.tl l)
-
-let rec literal_to_monotype = function
-  | Call(id, params) -> id ^ "(" ^ string_of_expr_list params ^ ");"
-  | Id(s) -> s ^ ";"
-  | Noexpr -> raise Exit
-  | StrLiteral(l) -> "new_monotype(1, 0, " ^ l ^ ", 0, 0.0);"
-  | Assign(v, e) -> v ^ " = " ^ literal_to_monotype e
-
 let assign_type monotype =
   if monotype.isint = true then "int" else
   if monotype.isstring = true then "char *" else
   if monotype.isbool = true then "int" else
   if monotype.isfloat = true then "float" else raise Exit
+*)
+(* END DEATH ZONE *)
 
 (* Returns a pair. The first element is a C string, the second is the symbol table
    in its proper state following the statement in the first element. *)
@@ -48,6 +42,16 @@ let rec c_of_expr expr sym_table =
   | StrLiteral(l) -> "StrLiteral", l
   | Id(s) -> "Id", s
   | Noexpr -> "Noexpr", ""
+
+let rec string_of_expr_list l helper =
+  c_of_expr (List.hd l) ^ ", " ^ string_of_expr_list (List.tl l)
+
+let rec literal_to_monotype = function
+  | Call(id, params) -> id ^ "(" ^ string_of_expr_list params ^ ");"
+  | Id(s) -> s ^ ";"
+  | Noexpr -> raise Exit
+  | StrLiteral(l) -> "new_monotype(1, 0, " ^ l ^ ", 0, 0.0);"
+  | Assign(v, e) -> v ^ " = " ^ literal_to_monotype e
 
 let rec c_of_stmnt expr sym_table =
   (fst (c_of_expr expr sym_table) ^ ";\n", snd (c_of_expr expr sym_table))
