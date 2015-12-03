@@ -60,7 +60,9 @@ let arg_body_to_c_body arg_body =
   "THE BODY"
 
 let arg_func_to_c_func arg_func =
-  "monotype " ^ arg_func.fname ^ "("
+  "monotype " ^ arg_func.fname ^ "(" ^
+  List.fold_left (fun a b -> a ^ b ^ ", ") "" arg_func.formals ^ ") {\n" ^ 
+  arg_statement_to_c_statement arg_func.statement ^ "\n}"
 
 (* Route the functions and body segments of the program pair to their respective
    handlers and return the result as a pair of strings. *)
