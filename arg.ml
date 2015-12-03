@@ -56,6 +56,11 @@ let rec c_of_stmnt expr sym_table =
 *)
 (* END DEATH ZONE *)
 
+(* Route an arg statement to its translator and return a string. *)
+let arg_stmt_to_c_stmt = function
+  | Expr(e) -> arg_expr_to_c_expr e
+  | While(e, s) -> arg_while_to_c_while e s
+
 let arg_body_to_c_body arg_body =
   "THE BODY"
 
@@ -63,7 +68,7 @@ let arg_body_to_c_body arg_body =
 let arg_func_to_c_func arg_func =
   "monotype " ^ arg_func.fname ^ "(" ^
   List.fold_left (fun a b -> a ^ b ^ ", ") "" arg_func.formals ^ ") {\n" ^ 
-  arg_statement_to_c_statement arg_func.statement ^ "\n}"
+  arg_stmt_to_c_stmt arg_func.statement ^ "\n}"
 
 (* Route the functions and body segments of the program pair to their respective
    handlers and return the result as a pair of strings. *)
