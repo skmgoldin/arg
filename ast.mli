@@ -10,10 +10,7 @@ type expr =
 
 type statement =
   | Expr of expr
-  | Loop of loop
-
-type loop =
-
+  | While of expr * statement
 
 type function = string * Id list * statement list
 
