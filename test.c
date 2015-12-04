@@ -14,8 +14,8 @@ struct monotype rando(struct monotype a, struct monotype b, struct monotype c) {
 	      return new_monotype(1, 0, b.s, 0, 0.0, NULL, 0);
 	    } else if(b.isbool) {
 	      return new_monotype(2, 0, "", b.b, 0.0, NULL, 0);
-	    } else if(b.isdouble) {
-	      return new_monotype(3, 0, "", 0, b.d, NULL, 0);
+	    } else if(b.isfloat) {
+	      return new_monotype(3, 0, "", 0, b.f, NULL, 0);
 	    }
 	  } else {
 	    if(c.isint) {
@@ -24,8 +24,8 @@ struct monotype rando(struct monotype a, struct monotype b, struct monotype c) {
 	      return new_monotype(1, 0, c.s, 0, 0.0, NULL, 0);
 	    } else if(c.isbool) {
 	      return new_monotype(2, 0, "", c.b, 0.0, NULL, 0);
-	    } else if(c.isdouble) {
-	      return new_monotype(3, 0, "", 0, c.d, NULL, 0);
+	    } else if(c.isfloat) {
+	      return new_monotype(3, 0, "", 0, c.f, NULL, 0);
 	    }
 	}
 }
@@ -41,8 +41,8 @@ void monotype_printer(struct monotype m)
 	} else if(m.isbool) {
 		printf("%d\n", m.b);
 		return;
-	} else if(m.isdouble) {
-		printf("%f\n", m.d);
+	} else if(m.isfloat) {
+		printf("%f\n", m.f);
 		return;
 	} else if(m.isarray) {
 		printf("array");
@@ -62,6 +62,8 @@ int main(int argc, char **argv)
 	// set_array_element(i, 0, new_monotype(0, 40, "", 0, 0.0, NULL, 0));
 
 	monotype_printer(get_array_element(a, 0));
+    
+    struct monotype *arr = malloc(sizeof(struct monotype) * 3); 
 
 	// monotype_printer(e);
 }
