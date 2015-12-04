@@ -4,7 +4,7 @@
 %token LPAREN RPAREN
 %token LBRACE RBRACE
 %token ASSIGN
-%token FUNCTION WHILE
+%token FUNCTION WHILE IF
 %token <string> STRLITERAL
 %token <string> ID
 %token EOF
@@ -44,6 +44,7 @@ func_body:
 
 statement:
   | expr SEMI                          { Expr($1) }
+  | IF LPAREN expr RPAREN LBRACE statement RBRACE { If($3, $6) }
   | WHILE LPAREN expr RPAREN statement { While($3, $5) }
 
 expr:

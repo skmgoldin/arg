@@ -10,6 +10,7 @@ rule token = parse
 | '='       { ASSIGN }
 | '{'       { LBRACE }
 | '}'       { RBRACE }
+| "IF"      { IF }
 | "WHILE"   { WHILE }
 | "FUNCTION"    { FUNCTION }
 | '"'[^'\n']*'"' as lxm { STRLITERAL(lxm) }

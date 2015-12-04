@@ -10,6 +10,7 @@ type expr =
 
 type statement =
   | Expr of expr
+  | If of expr * statement
   | While of expr * statement
 
 type func = {
