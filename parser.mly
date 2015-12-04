@@ -4,7 +4,7 @@
 %token LPAREN RPAREN
 %token LBRACE RBRACE
 %token ASSIGN
-%token FUNCTION WHILE IF
+%token FUNCTION WHILE IF ELSE
 %token <string> STRLITERAL
 %token <string> ID
 %token EOF
@@ -39,8 +39,12 @@ func:
     }
 
 statement:
-  | expr SEMI                          { Expr($1) }
-  | IF LPAREN expr RPAREN LBRACE stmt_opt RBRACE { If($3, $6) }
+  | expr SEMI                         { Expr($1) }
+  | IF LPAREN expr RPAREN LBRACE
+    stmt_opt RBRACE ELSE LBRACE
+    stmt_opt RBRACE                   { IfElse($3, $6, $10) }
+  | IF LPAREN expr RPAREN LBRACE
+    stmt_opt RBRACE                   { If($3, $6) }
   | WHILE LPAREN expr RPAREN stmt_opt { While($3, $5) }
 
 expr:

@@ -11,6 +11,7 @@ rule token = parse
 | '{'       { LBRACE }
 | '}'       { RBRACE }
 | "IF"      { IF }
+| "ELSE"    { ELSE }
 | "WHILE"   { WHILE }
 | "FUNCTION"    { FUNCTION }
 | '"'[^'\n']*'"' as lxm { STRLITERAL(lxm) }

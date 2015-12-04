@@ -11,6 +11,7 @@ type expr =
 type statement =
   | Expr of expr
   | If of expr * statement list
+  | IfElse of expr * statement list * statement list
   | While of expr * statement list
 
 type func = {

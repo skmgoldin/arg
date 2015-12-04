@@ -68,6 +68,8 @@ let arg_expr_to_c_expr = function
 (* Route an arg statement to its translator and return a string. *)
 let rec arg_stmt_to_c_stmt = function
   | Expr(e) -> arg_expr_to_c_expr e
+  | IfElse(e, s1, s2) -> ""
+  | If(e, s) -> ""
   | While(e, s) -> ""
 
 (* Convert a list of arg statements to a string of C statements *)
