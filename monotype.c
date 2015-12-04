@@ -60,7 +60,7 @@ struct monotype new_monotype(int flag, int i, char *s, int b, double d, struct m
 		nm.isarray = 0;
 		nm.a_len = 0;
 	} else if(flag == 4) {
-        nm.a = malloc(sizeof(monotype * a_len));
+        nm.a = malloc(sizeof(struct monotype) * a_len);
         nm.a = a;
 
         nm.isint = 0;
