@@ -11,15 +11,15 @@ struct monotype {
   int isbool;
   int b;
 
-  int isdouble;
-  double d;
+  int isfloat;
+  float f;
 
   int isarray;
   struct monotype* a;
   int a_len;
 };
 
-struct monotype new_monotype(int flag, int i, char *s, int b, double d, struct monotype* a, int a_len)
+struct monotype new_monotype(int flag, int i, char *s, int b, float f, struct monotype* a, int a_len)
 {
 	struct monotype nm;
 
@@ -29,7 +29,7 @@ struct monotype new_monotype(int flag, int i, char *s, int b, double d, struct m
         nm.isint = 1;
 		nm.ischar = 0;
 		nm.isbool = 0;
-		nm.isdouble = 0;
+		nm.isfloat = 0;
         nm.isarray = 0;
         nm.a_len = 0;
 	} else if(flag == 1) {
@@ -38,7 +38,7 @@ struct monotype new_monotype(int flag, int i, char *s, int b, double d, struct m
 		nm.isint = 0;
 		nm.ischar = 1;
 		nm.isbool = 0;
-		nm.isdouble = 0;
+		nm.isfloat = 0;
 		nm.isarray = 0;
 		nm.a_len = 0;
 	} else if(flag == 2) {
@@ -47,16 +47,16 @@ struct monotype new_monotype(int flag, int i, char *s, int b, double d, struct m
 		nm.isint = 0;
 		nm.ischar = 0;
 		nm.isbool = 1;
-		nm.isdouble = 0;
+		nm.isfloat = 0;
 		nm.isarray = 0;
 		nm.a_len = 0;
 	} else if(flag == 3) {
-		nm.d = d;
+		nm.f = f;
 
 		nm.isint = 0;
 		nm.ischar = 0;
 		nm.isbool = 0;
-		nm.isdouble = 1;
+		nm.isfloat = 1;
 		nm.isarray = 0;
 		nm.a_len = 0;
 	} else if(flag == 4) {
@@ -66,7 +66,7 @@ struct monotype new_monotype(int flag, int i, char *s, int b, double d, struct m
         nm.isint = 0;
         nm.ischar = 0;
         nm.isbool = 0;
-        nm.isdouble = 0;
+        nm.isfloat = 0;
         nm.isarray = 1;
         nm.a_len = a_len;
   }
