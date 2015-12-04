@@ -58,7 +58,13 @@ let rec c_of_stmnt expr sym_table =
 (* ### END DEATH ZONE ## *)
 
 let new_monotype_of_expr = function
+  | IntLiteral(i) -> "new_monotype(0, " ^ string_of_int i ^
+                     ", 0, 0, 0, NULL, 0);"
   | StrLiteral(str) -> "new_monotype(1, 0, " ^ str ^ ", 0, 0, NULL, 0);"
+  | BoolLiteral(b) -> if b then "new_monotype(2, 0, 0, 1, 0, NULL, 0);"
+                           else "new_monotype(2, 0, 0, 0, 0, NULL, 0);"
+  | FloatLiteral(f) -> "new_monotype(3, 0, 0, 0, " ^ string_of_float f ^
+                       ", NULL, 0);"
 
 (* Translate an arg expression in the AST to a C expression, returning a string
    of that translation. *)
