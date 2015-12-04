@@ -16,7 +16,7 @@ rule token = parse
 | "ELSE"    { ELSE }
 | "WHILE"   { WHILE }
 | "FUNCTION"    { FUNCTION }
-| '"'[^'\n']*'"' as lxm { STRLITERAL(lxm) }
+| '"'[^'\n''"']*'"' as lxm { STRLITERAL(lxm) }
 | ['0'-'9']+     as lxm { INTLITERAL(int_of_string lxm) }
 | ['0'-'9']+'.'['0'-'9']    as lxm { FLOATLITERAL(float_of_string lxm)}
 | "true"    { BOOLLITERAL(true) }
