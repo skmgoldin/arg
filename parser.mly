@@ -31,27 +31,31 @@ functions:
   | functions func                    { List.rev ($2 :: $1) }
 
 func:
-  | FUNCTION ID LPAREN params_opt RPAREN LBRACE func_body RBRACE
+  | FUNCTION ID LPAREN params_opt RPAREN LBRACE stmt_opt RBRACE
     {
       { fname = $2;
         formals = $4;
         body = $7; } 
     }
 
-func_body:
-  | /* nothing */                      { [] }
-  | body statement                     { List.rev ($2 :: $1) }
-
 statement:
   | expr SEMI                          { Expr($1) }
-  | IF LPAREN expr RPAREN LBRACE statement RBRACE { If($3, $6) }
-  | WHILE LPAREN expr RPAREN statement { While($3, $5) }
+  | IF LPAREN expr RPAREN LBRACE stmt_opt RBRACE { If($3, $6) }
+  | WHILE LPAREN expr RPAREN stmt_opt { While($3, $5) }
 
 expr:
   | ID ASSIGN expr                     { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN       { Call($1, $3) }
   | STRLITERAL                         { StrLiteral($1) }
   | ID                                 { Id($1) }
+
+stmt_opt:
+  | /* Nothing */                      { [] }
+  | stmt_list                          { $1 }
+
+stmt_list:
+  | statement                          { [$1] }
+  | stmt_list statement                { List.rev ($2 :: $1) }
 
 actuals_opt:
   | /* Nothing */                      { [] }

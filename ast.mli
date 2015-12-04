@@ -10,8 +10,8 @@ type expr =
 
 type statement =
   | Expr of expr
-  | If of expr * statement
-  | While of expr * statement
+  | If of expr * statement list
+  | While of expr * statement list
 
 type func = {
   fname : string;
