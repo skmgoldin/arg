@@ -59,7 +59,7 @@ int main(int argc, char **argv)
 	set_array_element(a, 0, new_monotype(0, 5, "", 0, 0.0, NULL, 0));
 
 	struct monotype i = new_monotype(0, 20, "", 0, 0.0, NULL, 0);
-	set_array_element(i, 0, new_monotype(0, 40, "", 0, 0.0, NULL, 0));
+	// set_array_element(i, 0, new_monotype(0, 40, "", 0, 0.0, NULL, 0));
 
 	monotype_printer(get_array_element(a, 0));
 

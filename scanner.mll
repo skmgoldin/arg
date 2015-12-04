@@ -10,11 +10,14 @@ rule token = parse
 | '='       { ASSIGN }
 | '{'       { LBRACE }
 | '}'       { RBRACE }
+| '['       { LBRACK }
+| ']'       { RBRACK }
 | "IF"      { IF }
 | "ELSE"    { ELSE }
 | "WHILE"   { WHILE }
 | "FUNCTION"    { FUNCTION }
 | '"'[^'\n']*'"' as lxm { STRLITERAL(lxm) }
+| ['0'-'9']+     as lxm { INTLITERAL(int_of_string lxm) }
 | ['A'-'Z' 'a'-'z']['A'-'Z' 'a'-'z' '0'-'9' '_']* as lxm { ID(lxm) }
 | eof       { EOF }
 | _ as char { raise (Failure("Illegal character " ^ Char.escaped char)) }

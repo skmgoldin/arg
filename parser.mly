@@ -3,9 +3,11 @@
 %token COMMA SEMI
 %token LPAREN RPAREN
 %token LBRACE RBRACE
+%token LBRACK RBRACK
 %token ASSIGN
 %token FUNCTION WHILE IF ELSE
 %token <string> STRLITERAL
+%token <int>    INTLITERAL
 %token <string> ID
 %token EOF
 
@@ -35,7 +37,7 @@ func:
     {
       { fname = $2;
         formals = $4;
-        body = $7; } 
+        body = $7; }
     }
 
 statement:
@@ -46,6 +48,7 @@ statement:
   | IF LPAREN expr RPAREN LBRACE
     stmt_opt RBRACE                   { If($3, $6) }
   | WHILE LPAREN expr RPAREN stmt_opt { While($3, $5) }
+  | ID LBRACK INTLITERAL RBRACK ASSIGN LBRACE actuals_opt RBRACE SEMI     { ArrayAssign($1, $3, $7) }
 
 expr:
   | ID ASSIGN expr                     { Assign($1, $3) }
