@@ -57,13 +57,16 @@ let rec c_of_stmnt expr sym_table =
 *)
 (* ### END DEATH ZONE ## *)
 
+let new_monotype_of_expr = function
+  | StrLiteral(str) -> "new_monotype(1, 0, " ^ str ^ ", 0, 0, NULL, 0);"
+
 (* Translate an arg expression in the AST to a C expression, returning a string
    of that translation. *)
 let arg_expr_to_c_expr = function
-  | Assign(str, e) -> ""
+  | Assign(str, e) -> "struct monotype " ^ str ^ " = " ^ new_monotype_of_expr e
   | Call(str, el) -> ""
   | Id(str) -> ""
-  | StrLiteral(str) -> ""
+  | StrLiteral(str) -> "" 
   | Binop(e1, op, e2) -> ""
   | Noexpr -> raise Exit
 
@@ -101,7 +104,7 @@ let translate_program arg =
 let wrap_program translated_program =
   let functions = fst translated_program in
   let body = snd translated_program in
-  "#include <stdio.h>\n\n" ^ functions ^ "\n\nint main() {\n" ^ body ^ "\n\n\treturn 0;\n}\n"
+  "#include <stdio.h>\n#include \"monotype.c\"\n" ^ functions ^ "\n\nint main() {\n" ^ body ^ "\n\n\treturn 0;\n}\n"
 
 let _ =
   let ic = open_in arg_file in
