@@ -57,6 +57,8 @@ let rec c_of_stmnt expr sym_table =
 *)
 (* ### END DEATH ZONE ## *)
 
+(* Translate an arg expression in the AST to a C expression, returning a string
+   of that translation. *)
 let arg_expr_to_c_expr = function
   | Assign(str, e) -> ""
   | Call(str, el) -> ""
@@ -76,7 +78,8 @@ let rec arg_stmt_to_c_stmt = function
 let arg_body_to_c_body arg_body =
   List.map arg_stmt_to_c_stmt arg_body
 
-(* Translate an arg function in the AST to a C function, returning a string. *)
+(* Translate an arg function in the AST to a C function, returning a string of
+   that translation. *)
 let arg_func_to_c_func arg_func =
   "monotype " ^ arg_func.fname ^ "(" ^
   List.fold_left (fun a b -> a ^ b ^ ", ") "" arg_func.formals ^ ") {\n" ^ 
