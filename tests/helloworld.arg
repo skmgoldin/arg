@@ -1,4 +1,3 @@
 msg = "Hello, World!";
-argarr[3] = { "hi", "dude", "yo" };
 
 PRINT("%s\n", msg);
