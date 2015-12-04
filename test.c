@@ -63,7 +63,9 @@ int main(int argc, char **argv)
 
 	monotype_printer(get_array_element(a, 0));
     
-    struct monotype *arr = malloc(sizeof(struct monotype) * 3); 
+    int arrlen = 3;
+    struct monotype *arr = malloc(sizeof(struct monotype) * arrlen); 
+    struct monotype stack_arr = new_monotype(4, 0, 0, 0, 0, arr, arrlen);
 
 	// monotype_printer(e);
 }
