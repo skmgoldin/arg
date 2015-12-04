@@ -136,7 +136,11 @@ let translate_program arg =
    List.fold_left (fun a b -> a ^ b) "" c_body)
 
 (* Include necessary C libraries. Declare functions at top of file, then wrap
-   body in a main function below.*)
+   body in a main function below.
+   (* TODO: We shouldn't be including monotype.c, we should write its contents
+      into the file. We obviously can't assume the user will have their own copy
+      of monotype.c in their own directory! *)
+*)
 let wrap_program translated_program =
   let functions = fst translated_program in
   let body = snd translated_program in
