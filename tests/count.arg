@@ -1,0 +1,5 @@
+i = "adsf";
+while(i < 100) {
+	PRINT("%d\n", i);
+	i++;
+}

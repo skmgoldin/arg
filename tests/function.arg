@@ -1,0 +1,7 @@
+test("test1");
+test("line2");
+
+FUNCTION test(str) {
+	PRINT("str: %s\n", str);
+}
+
