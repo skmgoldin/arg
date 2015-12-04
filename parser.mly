@@ -8,6 +8,8 @@
 %token FUNCTION WHILE IF ELSE
 %token <string> STRLITERAL
 %token <int>    INTLITERAL
+%token <float>  FLOATLITERAL
+%token <bool>   BOOLLITERAL
 %token <string> ID
 %token EOF
 
@@ -54,6 +56,9 @@ expr:
   | ID ASSIGN expr                     { Assign($1, $3) }
   | ID LPAREN actuals_opt RPAREN       { Call($1, $3) }
   | STRLITERAL                         { StrLiteral($1) }
+  | INTLITERAL                         { IntLiteral($1) }
+  | FLOATLITERAL                       { FloatLiteral($1) }
+  | BOOLLITERAL                        { BoolLiteral($1) }
   | ID                                 { Id($1) }
 
 stmt_opt:

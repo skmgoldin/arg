@@ -5,6 +5,9 @@ type expr =
   | Call of string * expr list
   | Id of string
   | StrLiteral of string
+  | IntLiteral of int
+  | FloatLiteral of float
+  | BoolLiteral of bool  
   | Binop of expr * op * expr
   | Noexpr
 
