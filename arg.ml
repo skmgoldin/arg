@@ -57,6 +57,7 @@ let rec c_of_stmnt expr sym_table =
 *)
 (* ### END DEATH ZONE ## *)
 
+
 let new_monotype_of_expr = function
   | IntLiteral(i) -> "new_monotype(0, " ^ string_of_int i ^
                      ", 0, 0, 0, NULL, 0);"
@@ -76,12 +77,41 @@ let arg_expr_to_c_expr = function
   | Binop(e1, op, e2) -> ""
   | Noexpr -> raise Exit
 
+let new_monotype_array name len el =
+
+    (* Using name ^ len to create an internal name is a hack. A user could in
+       theory create an actual variable with that name. Need to use symtable? *)
+    let tmpname = name ^ string_of_int len in
+
+    (* First malloc a monotype array to store persistently in the stack
+       monotype *)
+    "struct monotype *" ^ tmpname ^
+    " = malloc(sizeof(struct monotype) * "^ string_of_int len ^ ");\n" ^ 
+    
+    (* Load the evaluated results of the el into the malloc'd array in order. *)
+    (fst
+        (List.fold_left
+            (fun p e ->
+                (fst p) ^ tmpname ^ "[" ^ string_of_int (snd p) ^
+                "] = " ^ new_monotype_of_expr e ^ ";\n", succ (snd p)
+            )
+            ("", 0) el
+        )
+    ) ^
+
+    (* Call the new_monotype constructor with the array flag and send in the
+       malloc'd and loaded array. *)
+    "struct monotype " ^ name ^ "  = " ^
+    "new_monotype(4, 0, NULL, 0, 0, " ^ tmpname ^ ", " ^
+    string_of_int len ^ ");\n" 
+
 (* Route an arg statement to its translator and return a string. *)
 let rec arg_stmt_to_c_stmt = function
   | Expr(e) -> arg_expr_to_c_expr e
   | IfElse(e, s1, s2) -> ""
   | If(e, s) -> ""
   | While(e, s) -> ""
+  | ArrayAssign(s, l, el) -> new_monotype_array s l el
 
 (* Convert a list of arg statements to a string of C statements *)
 let arg_body_to_c_body arg_body =
