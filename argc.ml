@@ -24,6 +24,11 @@ let arg_expr_to_c_expr = function
   | Binop(e1, op, e2) -> ""
   | Noexpr -> raise Exit
 
+(* Generate a C string to create a new monotype with a persistent array of
+   monotypes stored within it.
+   name: the array's user-specified name.
+   len: the array's user-specifie length.
+   el: an expression list, the evaluations of which comprise the array's contents*)
 let new_monotype_array name len el =
 
     (* Using name ^ len to create an internal name is a hack. A user could in
