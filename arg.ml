@@ -98,7 +98,7 @@ let translate_program arg =
 let wrap_program translated_program =
   let functions = fst translated_program in
   let body = snd translated_program in
-  "#include <stdio.h>\n\n" ^ functions ^ "\n\nint main() {" ^ body ^ "\n\n\treturn 0;\n}\n"
+  "#include <stdio.h>\n\n" ^ functions ^ "\n\nint main() {\n" ^ body ^ "\n\n\treturn 0;\n}\n"
 
 let _ =
   let ic = open_in arg_file in
