@@ -13,7 +13,7 @@ type statement =
   | If of expr * statement list
   | IfElse of expr * statement list * statement list
   | While of expr * statement list
-  | ArrayAssign of string * int * string list
+  | ArrayAssign of string * int * expr list
 
 type func = {
   fname : string;
