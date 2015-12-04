@@ -49,7 +49,7 @@ statement:
     stmt_opt RBRACE                   { IfElse($3, $6, $10) }
   | IF LPAREN expr RPAREN LBRACE
     stmt_opt RBRACE                   { If($3, $6) }
-  | WHILE LPAREN expr RPAREN stmt_opt { While($3, $5) }
+  | WHILE LPAREN expr RPAREN LBRACE stmt_opt RBRACE { While($3, $6) }
   | ID LBRACK INTLITERAL RBRACK ASSIGN LBRACE actuals_opt RBRACE SEMI     { ArrayAssign($1, $3, $7) }
 
 expr:
