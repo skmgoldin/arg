@@ -74,7 +74,7 @@ let rec arg_stmt_to_c_stmt = function
 
 (* Convert a list of arg statements to a string of C statements *)
 let arg_body_to_c_body arg_body =
-  "THE BODY"
+  List.map arg_stmt_to_c_stmt arg_body
 
 (* Translate an arg function in the AST to a C function, returning a string. *)
 let arg_func_to_c_func arg_func =
@@ -90,7 +90,8 @@ let translate_program arg =
   let arg_body = snd arg in
   let c_funcs = List.map arg_func_to_c_func arg_funcs in
   let c_body = arg_body_to_c_body arg_body in
-  (List.fold_left (fun a b -> a ^ b) "" c_funcs, c_body)
+  (List.fold_left (fun a b -> a ^ b) "" c_funcs,
+   List.fold_left (fun a b -> a ^ b) "" c_body)
 
 (* Include necessary C libraries. Declare functions at top of file, then wrap
    body in a main function below.*)
