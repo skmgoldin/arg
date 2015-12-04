@@ -14,7 +14,7 @@ if __name__ == "__main__":
 			program = TESTS[i];
 
 			try:
-					err = os.system("./arg tests/"+program+supp)
+					err = os.system("./argc tests/"+program+supp)
 					if err != 0:
 						print(str(i+1) + ". "+program +": FAIL")
 						print("\tFailed to compile")
