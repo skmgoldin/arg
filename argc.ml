@@ -24,7 +24,7 @@ let rec monotype_of_expr = function
         let arglist = String.sub arglist 0 (strlen - 2) in
         str ^ "(" ^ arglist ^ ")"
     | Id(str) -> str
-    | Binop(e1, op, e2) -> "BINOP"
+    | Binop(e1, op, e2) -> "BINOP" (* TODO *)
     | Noexpr -> raise Exit
 
 (* Generate a C string to create a new monotype with a persistent array of
@@ -60,6 +60,12 @@ let new_monotype_array name len el =
     "new_monotype(4, 0, NULL, 0, 0, " ^ tmpname ^ ", " ^
     string_of_int len ^ ");\n" 
 
+(* Generate an if/else block that directs a monotype to the appropriate printf
+   format string.
+   (* TODO: we should support PRINT statements with multiple arguments, so we'll
+   need to build up the format strings in a smarter way, possibly by evaluating
+   a list of expressions and programmatically building up fmt strings based on
+   their types. *) *)
 let arg_print_to_c_print fmt expr =
     "if(" ^ monotype_of_expr expr ^ ".isint) {\n" ^
     "printf(\"%d\\n\", " ^ monotype_of_expr expr ^ ".i);\n" ^
