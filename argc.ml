@@ -1,3 +1,10 @@
+(* TODO: Add both global and function-level symbol tables to check that
+   variables are in scope. We should consider whether we want to store types
+   in the symtable as well, since doing so would let us generate a lot less code
+   in some cases. *)
+(* TODO: Figure out memory freeing for arrays. This will probably be reliant on
+   our symbol table implementation. *)
+
 open Ast
 
 let arg_file = Sys.argv.(1) ^ ".arg"
