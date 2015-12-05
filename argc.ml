@@ -4,7 +4,9 @@ let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
 module SymTable = Map.Make (String)
 
-(* Generate a C string to create a new monotype with the proper flags set. *)
+(* Because everything in ARG must be represented by a C monotype, this function
+   should return strings of valid C code which will evaluate in C to a struct
+   monotype. *)
 let rec monotype_of_expr = function
     | IntLiteral(i) -> "new_monotype(0, " ^ string_of_int i ^
                      ", 0, 0, 0, NULL, 0)"
@@ -16,7 +18,7 @@ let rec monotype_of_expr = function
     | Assign(str, e) -> "struct monotype " ^ str ^ " = " ^ monotype_of_expr e
     | Call(str, el) ->
         let arglist =
-            List.fold_left (fun a b -> a ^ monotype_of_expr b ^ ", ") "" el in
+            List.fold_left (fun s e -> s ^ monotype_of_expr e ^ ", ") "" el in
         (* Arglist has an extra comma and space at its end. Remove them below. *)
         let strlen = String.length arglist in
         let arglist = String.sub arglist 0 (strlen - 2) in
