@@ -15,6 +15,10 @@
 %token EOF
 
 %right ASSIGN
+%left EQ NEQ
+%left LESS GREATER LEQ GEQ
+%left ADD SUB
+%left MULT DIV
 
 %start program
 %type <Ast.program> program
@@ -72,6 +76,7 @@ expr:
   | expr LEQ expr                      { Binop($1, Leq, $3) }
   | expr GREATER expr                  { Binop($1, Greater, $3) }
   | expr GEQ expr                      { Binop($1, Geq, $3) }
+  | LPAREN expr RPAREN                 { $2 }
 
 stmt_opt:
   | /* Nothing */                      { [] }
