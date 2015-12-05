@@ -12,6 +12,10 @@ rule token = parse
 | '}'       { RBRACE }
 | '['       { LBRACK }
 | ']'       { RBRACK }
+| '+'       { PLUS }
+| '-'       { MINUS }
+| '*'       { MULT }
+| '/'       { DIV }
 | "IF"      { IF }
 | "ELSE"    { ELSE }
 | "WHILE"   { WHILE }
