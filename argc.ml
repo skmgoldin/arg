@@ -118,7 +118,10 @@ let arg_print_to_c_print fmt expr =
     "} else if(" ^ monotype_of_expr expr ^ ".ischar) {\n" ^
     "printf(\"%s\\n\", " ^ monotype_of_expr expr ^ ".s);\n" ^
     "} else if(" ^ monotype_of_expr expr ^ ".isbool) {\n" ^
-    "printf(\"%s\\n\", " ^ monotype_of_expr expr ^ ".b);\n" ^
+    "if(" ^ monotype_of_expr expr ^ ".b) {\n" ^
+    "printf(\"%s\\n\", \"True\");\n" ^
+    "} else {\n" ^
+    "printf(\"%s\\n\", \"False\");\n}" ^
     "} else if(" ^ monotype_of_expr expr ^ ".isfloat) {\n" ^
     "printf(\"%f\\n\", " ^ monotype_of_expr expr ^ ".f);\n" ^
     "} else { printf(\"%s\\n\", \"Error!\"); }"
