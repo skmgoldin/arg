@@ -86,7 +86,7 @@ let arg_body_to_c_body arg_body =
    that translation. *)
 let arg_func_to_c_func arg_func =
     let arglist =
-        List.fold_left (fun a b -> a ^ b ^ ", ") "" arg_func.formals in
+        List.fold_left (fun a b -> a ^ "struct monotype " ^ b ^ ", ") "" arg_func.formals in
     (* Arglist has an extra comma and space at its end. Remove them below. *)
     let strlen = String.length arglist in
     let arglist = String.sub arglist 0 (strlen - 2) in
