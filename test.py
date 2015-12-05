@@ -2,7 +2,7 @@ import subprocess
 import sys
 import os
 
-TESTS = ["helloworld", "count","function"]
+TESTS = ["binops", "helloworld", "count","function"]
        #  "calculations",
         # "count"];
 
