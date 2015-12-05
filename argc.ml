@@ -31,7 +31,19 @@ let rec monotype_of_expr = function
         let arglist = String.sub arglist 0 (strlen - 2) in
         str ^ "(" ^ arglist ^ ")"
     | Id(str) -> str
-    | Binop(e1, op, e2) -> "BINOP" (* TODO *)
+    | Binop(e1, op, e2) ->
+        let arg_binop_to_c_binop e1 e2 = function
+            | Add     -> "monotype_add(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Sub     -> "monotype_sub(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Mult     -> "monotype_mult(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Div     -> "monotype_div(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Equal     -> "monotype_equal(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Neq     -> "monotype_neq(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Less     -> "monotype_less(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Leq     -> "monotype_leq(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Greater     -> "monotype_greater(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Geq     -> "monotype_geq(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+        in arg_binop_to_c_binop e1 e2 op
     | Noexpr -> raise Exit
 
 (* Generate a C string to create a new monotype with a persistent array of
@@ -48,8 +60,8 @@ let new_monotype_array name len el =
     (* First malloc a monotype array to store persistently in the stack
        monotype *)
     "struct monotype *" ^ tmpname ^
-    " = malloc(sizeof(struct monotype) * "^ string_of_int len ^ ");\n" ^ 
-    
+    " = malloc(sizeof(struct monotype) * "^ string_of_int len ^ ");\n" ^
+
     (* Load the evaluated results of the el into the malloc'd array in order. *)
     (fst
         (List.fold_left
@@ -65,7 +77,7 @@ let new_monotype_array name len el =
        malloc'd and loaded array. *)
     "struct monotype " ^ name ^ "  = " ^
     "new_monotype(4, 0, NULL, 0, 0, " ^ tmpname ^ ", " ^
-    string_of_int len ^ ");\n" 
+    string_of_int len ^ ");\n"
 
 (* Generate an if/else block that directs a monotype to the appropriate printf
    format string.
@@ -106,7 +118,7 @@ let arg_func_to_c_func arg_func =
     let strlen = String.length arglist in
     let arglist = String.sub arglist 0 (strlen - 2) in
 
-    "struct monotype " ^ arg_func.fname ^ "(" ^ arglist ^ ") {\n" ^ 
+    "struct monotype " ^ arg_func.fname ^ "(" ^ arglist ^ ") {\n" ^
     List.fold_left (fun a b -> a ^ b ^ "\n") ""
     (List.map arg_stmt_to_c_stmt arg_func.body) ^ "\n}"
 
@@ -141,4 +153,3 @@ let _ =
     print_endline ("generated " ^ c_file);
     close_out oc;
     close_in ic;
-
