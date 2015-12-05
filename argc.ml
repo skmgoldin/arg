@@ -5,6 +5,33 @@
 (* TODO: Figure out memory freeing for arrays. This will probably be reliant on
    our symbol table implementation. *)
 
+(* ON THE SYMTABLE, A PROPOSAL: 
+   If we send in the symtable to the assign and Id patterns in monotype_of_expr,
+   that'll be sufficient in the to determine from the assign context if a variable
+   needs to be created or merely updated; in the Id context, it will suffice to
+   determine if a variable has ever been declared and, if not, force an error.
+
+   But that is insufficient. We need to know our context when checking the symbol
+   table: accessing body variables from function context must be disallowed and
+   vice-versa, and creating new variables within Call and Binop context must be
+   disallowed. 
+
+   How about this: we build up the program string using a "buildup tuple":
+   (s, c, symtable).
+
+   All the code we've already written, which is building up a program string,
+   will do its work on the fst member of this tuple, s. Then we do the symtable
+   stuff seperately in the third member, symtable, and use the snd member, c, to
+   provide context.
+
+   The symtable uses as keys the str elements of the Id pattern. Its values are
+   strings corresponding to a context: either "body" or the name of a function. 
+   These contexts string are loaded into the c member of the buildup tuple by
+   arg_body_to_cbody and arg_func_to_c_func, which know what context they are
+   in. Then the buildup tuple is sent to monotype_of_expr, the patterns of which
+   will then have all the information they need in the buildup tuple to properly
+   handle variable scoping. *)
+
 open Ast
 
 let arg_file = Sys.argv.(1) ^ ".arg"

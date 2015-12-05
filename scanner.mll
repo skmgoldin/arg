@@ -12,6 +12,16 @@ rule token = parse
 | '}'       { RBRACE }
 | '['       { LBRACK }
 | ']'       { RBRACK }
+| '+'       { ADD }
+| '-'       { SUB }
+| '*'       { MULT }
+| '/'       { DIV }
+| "=="      { EQUAL }
+| "!="      { NEQ }
+| "<"       { LESS }
+| "<="      { LEQ }
+| ">"       { GREATER }
+| ">="      { GEQ }
 | "IF"      { IF }
 | "ELSE"    { ELSE }
 | "WHILE"   { WHILE }
