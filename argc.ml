@@ -5,7 +5,7 @@ let c_file = Sys.argv.(1) ^ ".c"
 module SymTable = Map.Make (String)
 
 (* Generate a C string to create a new monotype with the proper flags set. *)
-let new_monotype_of_expr = function
+let rec monotype_of_expr = function
     | IntLiteral(i) -> "new_monotype(0, " ^ string_of_int i ^
                      ", 0, 0, 0, NULL, 0);"
     | StrLiteral(str) -> "new_monotype(1, 0, " ^ str ^ ", 0, 0, NULL, 0);"
@@ -13,15 +13,10 @@ let new_monotype_of_expr = function
                            else "new_monotype(2, 0, 0, 0, 0, NULL, 0);"
     | FloatLiteral(f) -> "new_monotype(3, 0, 0, 0, " ^ string_of_float f ^
                        ", NULL, 0);"
-
-(* Translate an arg expression in the AST to a C expression, returning a string
-   of that translation. *)
-let arg_expr_to_c_expr = function
-    | Assign(str, e) -> "struct monotype " ^ str ^ " = " ^ new_monotype_of_expr e
-    | Call(str, el) -> ""
-    | Id(str) -> ""
-    | StrLiteral(str) -> "" 
-    | Binop(e1, op, e2) -> ""
+    | Assign(str, e) -> "struct monotype " ^ str ^ " = " ^ monotype_of_expr e
+    | Call(str, el) -> "CALL"
+    | Id(str) -> str
+    | Binop(e1, op, e2) -> "BINOP"
     | Noexpr -> raise Exit
 
 (* Generate a C string to create a new monotype with a persistent array of
@@ -45,7 +40,7 @@ let new_monotype_array name len el =
         (List.fold_left
             (fun p e ->
                 (fst p) ^ tmpname ^ "[" ^ string_of_int (snd p) ^
-                "] = " ^ new_monotype_of_expr e ^ ";\n", succ (snd p)
+                "] = " ^ monotype_of_expr e ^ ";\n", succ (snd p)
             )
             ("", 0) el
         )
@@ -57,13 +52,25 @@ let new_monotype_array name len el =
     "new_monotype(4, 0, NULL, 0, 0, " ^ tmpname ^ ", " ^
     string_of_int len ^ ");\n" 
 
+let arg_print_to_c_print fmt expr =
+    "if(" ^ monotype_of_expr expr ^ ".isint) {\n" ^
+    "printf(\"%d\\n\", " ^ monotype_of_expr expr ^ ".i);\n" ^
+    "} else if(" ^ monotype_of_expr expr ^ ".ischar) {\n" ^
+    "printf(\"%s\\n\", " ^ monotype_of_expr expr ^ ".s);\n" ^
+    "} else if(" ^ monotype_of_expr expr ^ ".isbool) {\n" ^
+    "printf(\"%s\\n\", " ^ monotype_of_expr expr ^ ".b);\n" ^
+    "} else if(" ^ monotype_of_expr expr ^ ".isfloat) {\n" ^
+    "printf(\"%f\\n\", " ^ monotype_of_expr expr ^ ".f);\n" ^
+    "} else { printf(\"%s\\n\", \"Error!\"); }"
+
 (* Route an arg statement to its translator and return a string. *)
 let rec arg_stmt_to_c_stmt = function
-    | Expr(e) -> arg_expr_to_c_expr e
-    | IfElse(e, s1, s2) -> ""
-    | If(e, s) -> ""
-    | While(e, s) -> ""
-    | ArrayAssign(s, l, el) -> new_monotype_array s l el
+    | Expr(e) -> monotype_of_expr e ^ "\n"
+    | IfElse(e, s1, s2) -> "" ^ "\n"
+    | If(e, s) -> "" ^ "\n"
+    | While(e, s) -> "" ^ "\n"
+    | ArrayAssign(s, l, el) -> new_monotype_array s l el ^ "\n"
+    | Print(s, e) -> arg_print_to_c_print s e ^ "\n"
 
 (* Convert a list of arg statements to a string of C statements *)
 let arg_body_to_c_body arg_body =
