@@ -79,8 +79,13 @@ let arg_body_to_c_body arg_body =
 (* Translate an arg function in the AST to a C function, returning a string of
    that translation. *)
 let arg_func_to_c_func arg_func =
-    "monotype " ^ arg_func.fname ^ "(" ^
-    List.fold_left (fun a b -> a ^ b ^ ", ") "" arg_func.formals ^ ") {\n" ^ 
+    let arglist =
+        List.fold_left (fun a b -> a ^ b ^ ", ") "" arg_func.formals in
+    (* Arglist has an extra comma and space at its end. Remove them below. *)
+    let strlen = String.length arglist in
+    let arglist = String.sub arglist 0 (strlen - 2) in
+
+    "monotype " ^ arg_func.fname ^ "(" ^ arglist ^ ") {\n" ^ 
     List.fold_left (fun a b -> a ^ b ^ "\n") ""
     (List.map arg_stmt_to_c_stmt arg_func.body) ^ "\n}"
 
