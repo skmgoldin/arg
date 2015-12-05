@@ -61,6 +61,16 @@ expr:
   | FLOATLITERAL                       { FloatLiteral($1) }
   | BOOLLITERAL                        { BoolLiteral($1) }
   | ID                                 { Id($1) }
+  | expr ADD expr                      { Binop($1, Add, $3) }
+  | expr SUB expr                      { Binop($1, Sub, $3) }
+  | expr MULT expr                     { Binop($1, Mult, $3) }
+  | expr DIV expr                      { Binop($1, Div, $3) }
+  | expr EQUAL expr                    { Binop($1, Equal, $3) }
+  | expr NEQ expr                      { Binop($1, Neq, $3) }
+  | expr LESS expr                     { Binop($1, Less, $3) }
+  | expr LEQ expr                      { Binop($1, Leq, $3) }
+  | expr GREATER expr                  { Binop($1, Greater, $3) }
+  | expr GEQ expr                      { Binop($1, Geq, $3) }
 
 stmt_opt:
   | /* Nothing */                      { [] }
