@@ -91,7 +91,7 @@ let arg_func_to_c_func arg_func =
     let strlen = String.length arglist in
     let arglist = String.sub arglist 0 (strlen - 2) in
 
-    "monotype " ^ arg_func.fname ^ "(" ^ arglist ^ ") {\n" ^ 
+    "struct monotype " ^ arg_func.fname ^ "(" ^ arglist ^ ") {\n" ^ 
     List.fold_left (fun a b -> a ^ b ^ "\n") ""
     (List.map arg_stmt_to_c_stmt arg_func.body) ^ "\n}"
 
