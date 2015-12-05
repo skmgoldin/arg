@@ -17,6 +17,7 @@ type statement =
   | IfElse of expr * statement list * statement list
   | While of expr * statement list
   | ArrayAssign of string * int * expr list
+  | Print of string * expr
 
 type func = {
   fname : string;

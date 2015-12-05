@@ -5,7 +5,7 @@
 %token LBRACE RBRACE
 %token LBRACK RBRACK
 %token ASSIGN
-%token FUNCTION WHILE IF ELSE
+%token FUNCTION WHILE IF ELSE PRINT
 %token <string> STRLITERAL
 %token <int>    INTLITERAL
 %token <float>  FLOATLITERAL
@@ -51,6 +51,7 @@ statement:
     stmt_opt RBRACE                   { If($3, $6) }
   | WHILE LPAREN expr RPAREN LBRACE stmt_opt RBRACE { While($3, $6) }
   | ID LBRACK INTLITERAL RBRACK ASSIGN LBRACE actuals_opt RBRACE SEMI     { ArrayAssign($1, $3, $7) }
+  | PRINT LPAREN STRLITERAL COMMA expr RPAREN SEMI { Print($3, $5) }
 
 expr:
   | ID ASSIGN expr                     { Assign($1, $3) }
