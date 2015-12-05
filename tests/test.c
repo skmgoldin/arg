@@ -68,8 +68,10 @@ int main(int argc, char **argv)
   struct monotype stack_arr = new_monotype(4, 0, 0, 0, 0, arr, arrlen);
 
 	struct monotype i1 = new_monotype(0, 1, "", 0, 0.0, NULL, 0);
-	struct monotype i2 = new_monotype(0, 2, "", 0, 0.0, NULL, 0);
-	// struct monotype i3 = new_monotype
+	struct monotype i2 = new_monotype(0, 3, "", 0, 0.0, NULL, 0);
+	struct monotype i3 = monotype_equal(i1, i2);
+
+	monotype_printer(i3);
 
 	// monotype_printer(e);
 }
