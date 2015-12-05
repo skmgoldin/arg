@@ -1,5 +1,5 @@
-i = "adsf";
+i = 0;
 while(i < 100) {
-	PRINT("%d\n", i);
-	i++;
+	PRINT("%x\n", i);
+	i = i + 1;
 }

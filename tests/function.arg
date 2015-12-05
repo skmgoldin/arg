@@ -1,7 +1,8 @@
-test("test1");
-test("line2");
-
-FUNCTION test(str) {
-	PRINT("str: %s\n", str);
+FUNCTION printfunc(str) {
+	PRINT("%x\n", str);
 }
+
+printfunc("line1");
+printfunc("line2");
+
 
