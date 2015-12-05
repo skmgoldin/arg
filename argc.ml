@@ -14,7 +14,13 @@ let rec monotype_of_expr = function
     | FloatLiteral(f) -> "new_monotype(3, 0, 0, 0, " ^ string_of_float f ^
                        ", NULL, 0);"
     | Assign(str, e) -> "struct monotype " ^ str ^ " = " ^ monotype_of_expr e
-    | Call(str, el) -> "CALL"
+    | Call(str, el) ->
+        let arglist =
+            List.fold_left (fun a b -> a ^ monotype_of_expr b ^ ", ") "" el in
+        (* Arglist has an extra comma and space at its end. Remove them below. *)
+        let strlen = String.length arglist in
+        let arglist = String.sub arglist 0 (strlen - 2) in
+        str ^ "(" ^ arglist ^ ");"
     | Id(str) -> str
     | Binop(e1, op, e2) -> "BINOP"
     | Noexpr -> raise Exit
