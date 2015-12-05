@@ -7,12 +7,12 @@ module SymTable = Map.Make (String)
 (* Generate a C string to create a new monotype with the proper flags set. *)
 let rec monotype_of_expr = function
     | IntLiteral(i) -> "new_monotype(0, " ^ string_of_int i ^
-                     ", 0, 0, 0, NULL, 0);"
-    | StrLiteral(str) -> "new_monotype(1, 0, " ^ str ^ ", 0, 0, NULL, 0);"
-    | BoolLiteral(b) -> if b then "new_monotype(2, 0, 0, 1, 0, NULL, 0);"
-                           else "new_monotype(2, 0, 0, 0, 0, NULL, 0);"
+                     ", 0, 0, 0, NULL, 0)"
+    | StrLiteral(str) -> "new_monotype(1, 0, " ^ str ^ ", 0, 0, NULL, 0)"
+    | BoolLiteral(b) -> if b then "new_monotype(2, 0, 0, 1, 0, NULL, 0)"
+                           else "new_monotype(2, 0, 0, 0, 0, NULL, 0)"
     | FloatLiteral(f) -> "new_monotype(3, 0, 0, 0, " ^ string_of_float f ^
-                       ", NULL, 0);"
+                       ", NULL, 0)"
     | Assign(str, e) -> "struct monotype " ^ str ^ " = " ^ monotype_of_expr e
     | Call(str, el) ->
         let arglist =
@@ -20,7 +20,7 @@ let rec monotype_of_expr = function
         (* Arglist has an extra comma and space at its end. Remove them below. *)
         let strlen = String.length arglist in
         let arglist = String.sub arglist 0 (strlen - 2) in
-        str ^ "(" ^ arglist ^ ");"
+        str ^ "(" ^ arglist ^ ")"
     | Id(str) -> str
     | Binop(e1, op, e2) -> "BINOP"
     | Noexpr -> raise Exit
@@ -71,7 +71,7 @@ let arg_print_to_c_print fmt expr =
 
 (* Route an arg statement to its translator and return a string. *)
 let rec arg_stmt_to_c_stmt = function
-    | Expr(e) -> monotype_of_expr e ^ "\n"
+    | Expr(e) -> monotype_of_expr e ^ ";\n"
     | IfElse(e, s1, s2) -> "" ^ "\n"
     | If(e, s) -> "" ^ "\n"
     | While(e, s) -> "" ^ "\n"
