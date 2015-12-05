@@ -1,5 +1,6 @@
 %{ open Ast %}
 
+%token ADD SUB MULT DIV EQUAL NEQ LESS LEQ GREATER GEQ
 %token COMMA SEMI
 %token LPAREN RPAREN
 %token LBRACE RBRACE
