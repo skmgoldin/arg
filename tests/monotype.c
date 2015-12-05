@@ -74,6 +74,12 @@ struct monotype new_monotype(int flag, int i, char *s, int b, float f, struct mo
 	return nm;
 }
 
+void error(char *message) {
+  printf("%s", message);
+  printf("\n");
+  exit(1);
+}
+
 struct monotype get_array_element(struct monotype a, int index) {
   if (a.isarray != 1) {
     printf("MONOTYPE IS NOT ARRAY!\n");
@@ -90,4 +96,164 @@ struct monotype set_array_element(struct monotype a, int index, struct monotype 
   }
 
   *(a.a + index) = element;
+}
+
+struct monotype monotype_add(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(0, a.i + b.i, "", 0, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    error("can't add strings");
+  } else if (a.isbool && b.isbool) {
+    error("can't add bools");
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(3, 0, "", 0, a.f + b.f, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't add arrays");
+  } else {
+    error("can't add vars of different types");
+  }
+}
+
+struct monotype monotype_sub(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(0, a.i - b.i, "", 0, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    error("can't subtract strings");
+  } else if (a.isbool && b.isbool) {
+    error("can't subtract bools");
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(3, 0, "", 0, a.f - b.f, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't subtract arrays");
+  } else {
+    error("can't subtract vars of different types");
+  }
+}
+
+struct monotype monotype_mult(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(0, a.i * b.i, "", 0, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    error("can't multiply strings");
+  } else if (a.isbool && b.isbool) {
+    error("can't multiply bools");
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(3, 0, "", 0, a.f * b.f, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't multiply arrays");
+  } else {
+    error("can't add vars of different types");
+  }
+}
+
+struct monotype monotype_div(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(0, a.i / b.i, "", 0, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    error("can't divide strings");
+  } else if (a.isbool && b.isbool) {
+    error("can't divide bools");
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(3, 0, "", 0, a.f / b.f, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't divide arrays");
+  } else {
+    error("can't add vars of different types");
+  }
+}
+
+struct monotype monotype_equal(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(2, 0, "", a.i == b.i, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    return new_monotype(2, 0, "", strcmp(a.s, b.s) == 0, 0.0, NULL, 0);
+  } else if (a.isbool && b.isbool) {
+    return new_monotype(2, 0, "", a.b == b.b, 0.0, NULL, 0);
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(2, 0, "", a.f == b.f, 0.0, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't == arrays");
+  } else {
+    error("can't == vars of different types");
+  }
+}
+
+struct monotype monotype_neq(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(2, 0, "", a.i != b.i, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    return new_monotype(2, 0, "", strcmp(a.s, b.s) != 0, 0.0, NULL, 0);
+  } else if (a.isbool && b.isbool) {
+    return new_monotype(2, 0, "", a.b != b.b, 0.0, NULL, 0);
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(2, 0, "", a.f != b.f, 0.0, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't != arrays");
+  } else {
+    error("can't != vars of different types");
+  }
+}
+
+struct monotype monotype_less(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(2, 0, "", a.i < b.i, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    error("can't < strings");
+  } else if (a.isbool && b.isbool) {
+    error("can't < bools");
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(2, 0, "", a.f < b.f, 0.0, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't < arrays");
+  } else {
+    error("can't < vars of different types");
+  }
+}
+
+struct monotype monotype_greater(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(2, 0, "", a.i > b.i, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    error("can't > strings");
+  } else if (a.isbool && b.isbool) {
+    error("can't > bools");
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(2, 0, "", a.f > b.f, 0.0, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't > arrays");
+  } else {
+    error("can't > vars of different types");
+  }
+}
+
+struct monotype monotype_leq(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(2, 0, "", a.i <= b.i, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    error("can't <= strings");
+  } else if (a.isbool && b.isbool) {
+    error("can't <= bools");
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(2, 0, "", a.f <= b.f, 0.0, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't <= arrays");
+  } else {
+    error("can't <= vars of different types");
+  }
+}
+
+struct monotype monotype_geq(struct monotype a, struct monotype b) {
+  if (a.isint && b.isint) {
+    return new_monotype(2, 0, "", a.i >= b.i, 0.0, NULL, 0);
+  } else if (a.ischar && b.ischar) {
+    error("can't >= strings");
+  } else if (a.isbool && b.isbool) {
+    error("can't >= bools");
+  } else if (a.isfloat && b.isfloat) {
+    return new_monotype(2, 0, "", a.f >= b.f, 0.0, NULL, 0);
+  } else if (a.isarray && b.isarray) {
+    error("can't >= arrays");
+  } else {
+    error("can't >= vars of different types");
+  }
 }

@@ -61,11 +61,15 @@ int main(int argc, char **argv)
 	struct monotype i = new_monotype(0, 20, "", 0, 0.0, NULL, 0);
 	// set_array_element(i, 0, new_monotype(0, 40, "", 0, 0.0, NULL, 0));
 
-	monotype_printer(get_array_element(a, 0));
-    
-    int arrlen = 3;
-    struct monotype *arr = malloc(sizeof(struct monotype) * arrlen); 
-    struct monotype stack_arr = new_monotype(4, 0, 0, 0, 0, arr, arrlen);
+	// monotype_printer(get_array_element(a, 0));
+
+  int arrlen = 3;
+  struct monotype *arr = malloc(sizeof(struct monotype) * arrlen);
+  struct monotype stack_arr = new_monotype(4, 0, 0, 0, 0, arr, arrlen);
+
+	struct monotype i1 = new_monotype(0, 1, "", 0, 0.0, NULL, 0);
+	struct monotype i2 = new_monotype(0, 2, "", 0, 0.0, NULL, 0);
+	// struct monotype i3 = new_monotype
 
 	// monotype_printer(e);
 }
