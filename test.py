@@ -2,11 +2,13 @@ import subprocess
 import sys
 import os
 
-TESTS = ["binops", "helloworld", "count","function"]
-       #  "calculations",
-        # "count"];
+TESTS = []
+for f in os.listdir("tests"):
+	if ".arg" in f:
+		TESTS.append(f[:-4])
 
 supp = " >/dev/null 2>&1";
+#supp = ""
 
 if __name__ == "__main__":
 
