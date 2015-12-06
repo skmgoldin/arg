@@ -90,4 +90,5 @@ struct monotype set_array_element(struct monotype a, int index, struct monotype 
   }
 
   *(a.a + index) = element;
+	return a;//fixing return warning, not sure if returning correct thing
 }
