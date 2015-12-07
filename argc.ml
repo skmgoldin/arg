@@ -71,7 +71,6 @@ let rec monotype_of_expr = function
             | Greater     -> "monotype_greater(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
             | Geq     -> "monotype_geq(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
         in arg_binop_to_c_binop e1 e2 op
-    | Noexpr -> raise Exit
 
 (* Generate a C string to create a new monotype with a persistent array of
    monotypes stored within it.

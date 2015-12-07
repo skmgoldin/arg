@@ -9,7 +9,6 @@ type expr =
   | FloatLiteral of float
   | BoolLiteral of bool  
   | Binop of expr * op * expr
-  | Noexpr
 
 type statement =
   | Expr of expr
