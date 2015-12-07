@@ -138,6 +138,62 @@ let rec arg_stmt_to_c_stmt = function
 let arg_body_to_c_body arg_body =
     List.map arg_stmt_to_c_stmt arg_body
 
+let build_func_jump_table arg_func = ""
+
+let expr_check_syms st arg_expr =
+    | IntLiteral(i) -> "new_monotype(0, " ^ string_of_int i ^
+                     ", 0, 0, 0, NULL, 0)"
+    | StrLiteral(str) -> "new_monotype(1, 0, " ^ str ^ ", 0, 0, NULL, 0)"
+    | BoolLiteral(b) -> if b then "new_monotype(2, 0, 0, 1, 0, NULL, 0)"
+                           else "new_monotype(2, 0, 0, 0, 0, NULL, 0)"
+    | FloatLiteral(f) -> "new_monotype(3, 0, 0, 0, " ^ string_of_float f ^
+                       ", NULL, 0)"
+    | Assign(str, e) -> "struct monotype " ^ str ^ " = " ^ monotype_of_expr e
+    | Call(str, el) ->
+        let arglist =
+            List.fold_left (fun s e -> s ^ monotype_of_expr e ^ ", ") "" el in
+        (* Arglist has an extra comma and space at its end. Remove them below. *)
+        let strlen = String.length arglist in
+        let arglist = String.sub arglist 0 (strlen - 2) in
+        str ^ "(" ^ arglist ^ ")"
+    | Id(str) -> str
+    | Binop(e1, op, e2) ->
+        let arg_binop_to_c_binop e1 e2 = function
+            | Add     -> "monotype_add(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Sub     -> "monotype_sub(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Mult     -> "monotype_mult(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Div     -> "monotype_div(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Equal     -> "monotype_equal(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Neq     -> "monotype_neq(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Less     -> "monotype_less(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Leq     -> "monotype_leq(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Greater     -> "monotype_greater(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+            | Geq     -> "monotype_geq(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
+        in arg_binop_to_c_binop e1 e2 op
+
+let rec stmt_check_syms st arg_stmt =
+    | Expr(e) -> expr_check_syms st e
+    | IfElse(e, s1, s2) ->
+        let st = expr_check_syms st e in
+        let st = stmt_check_syms st s1 in
+        let st = stmt_check_syms st s2
+    | If(e, s) ->
+        let st = expr_check_syms st e in
+        let st = stmt_check_syms st s
+    | While(e, s) ->
+        let st = expr_check_syms st e in
+        let st = stmt_check_syms st s
+    | ArrayAssign(s, l, el) ->
+        let st = expr_check_syms st e in
+        List.append st s
+    | Print(s, e) ->
+        expr_check_syms st e
+
+let build_func_sym_table arg_func =
+    let st = [] in
+    let st = List.fold_left (fun a b -> List.append a b) st arg_func.formals in
+    List.fold_left stmt_check_syms st arg_func.body
+
 (* Translate an arg function in the AST to a C function, returning a string of
    that translation. *)
 let arg_func_to_c_func arg_func =
@@ -156,6 +212,7 @@ let arg_func_to_c_func arg_func =
 let translate_program arg =
     let arg_funcs = fst arg in
     let arg_body = snd arg in
+  (*let (c_funcs, _, jt) = List.fold_left arg_func_to_c_func ([], []) arg_funcs in (* c_funcs, jt *)*)
     let c_funcs = List.map arg_func_to_c_func arg_funcs in
     let c_body = arg_body_to_c_body arg_body in
     (List.fold_left (fun a b -> a ^ b) "" c_funcs,
