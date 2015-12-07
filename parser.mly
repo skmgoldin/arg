@@ -15,7 +15,7 @@
 %token EOF
 
 %right ASSIGN
-%left EQ NEQ
+%left EQUAL NEQ
 %left LESS GREATER LEQ GEQ
 %left ADD SUB
 %left MULT DIV
