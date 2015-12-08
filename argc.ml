@@ -5,7 +5,6 @@ open Ast
 
 let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
-module SymTable = Map.Make (String)
 
 (* Because everything in ARG must be represented by a C monotype, this function
    should return strings of valid C code which will evaluate in C to a struct
