@@ -6,6 +6,8 @@ open Ast
 let arg_file = Sys.argv.(1) ^ ".arg"
 let c_file = Sys.argv.(1) ^ ".c"
 
+type scope_entity = Function | Variable
+
 (* Because everything in ARG must be represented by a C monotype, this function
    should return strings of valid C code which will evaluate in C to a struct
    monotype. *)
@@ -111,8 +113,16 @@ let arg_body_to_c_body arg_body =
    contains the given string and false otherwise. *)
 let list_contains_string l s =
     List.fold_left (fun a b ->
-        if ((snd a) || (String.compare (fst a) b) = 0) then (s, true) else (s, false))
+        if ((snd a) || (String.compare (fst a) (fst b)) = 0) then (s, true) else (s, false))
         (s, false) l
+
+let element_is_variable l s =
+    List.fold_left (fun a b ->
+        if ((snd a) || ((String.compare (fst a) (fst b)) = 0) && (snd b = Variable))
+        then (s, true)
+        else (s, false)
+    )
+    (s, false) l
 
 (* Do bookkeeping on the symbol table in expression context and note lookup
    failures where relevant. *)
@@ -123,7 +133,12 @@ let rec expr_check_syms st arg_expr =
     | BoolLiteral(b) -> st 
     | FloatLiteral(f) -> st
     | Assign(str, e) -> let st = expr_check_syms st e in
-        if snd (list_contains_string st str) then st else List.append st [str]
+        if (snd (list_contains_string st str) && snd (element_is_variable st str))
+        then st
+        else if snd (list_contains_string st str)
+        then (print_string
+        ("Cannot assign to an in-use function name. Error.\n"); raise Exit)
+        else List.append st [(str, Variable)]
     | Call(str, el) ->
         let _ = if snd (list_contains_string st str) then st else (print_string
         ("A function is called which does not exist. Error.\n"); raise Exit) in
@@ -151,7 +166,7 @@ let rec stmt_check_syms st arg_stmt =
         List.fold_left stmt_check_syms st s
     | ArrayAssign(s, l, el) ->
         let st = List.fold_left expr_check_syms st el in
-        List.append st [s]
+        List.append st [(s, Variable)]
     | Print(s, e) ->
         expr_check_syms st e
 
@@ -161,7 +176,7 @@ let build_func_sym_table arg_func =
     (* Add function params to symbol table *)
     let st = List.fold_left (fun a b ->
         if (snd (list_contains_string a b)) then (print_string ("Function " ^
-        "parameters with matching names. Error.\n"); raise Exit) else List.append a [b])
+        "parameters with matching names. Error.\n"); raise Exit) else List.append a [(b, Variable)])
         st arg_func.formals
     in
     (* With param name context in the symbol table, check the function body. *)
@@ -190,7 +205,7 @@ let translate_program arg =
 
     (* Check variable scope conformity. *)
     let _ = List.map build_func_sym_table arg_funcs in
-    let st = List.fold_left (fun a b -> List.append a [b.fname]) [] arg_funcs in
+    let st = List.fold_left (fun a b -> List.append a [(b.fname, Function)]) [] arg_funcs in
     let _ = List.fold_left stmt_check_syms st arg_body in
 
     (* Convert ARG to C. *)
