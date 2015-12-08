@@ -33,11 +33,11 @@ code:
 
 body:
   | /* nothing */                      { [] }
-  | body statement                     { List.rev ($2 :: $1) }
+  | body statement                     { $1 @ [$2] }
 
 functions:
   | /* nothing */                     { [] }
-  | functions func                    { List.rev ($2 :: $1) }
+  | functions func                    { $1 @ [$2] }
 
 func:
   | FUNCTION ID LPAREN params_opt RPAREN LBRACE stmt_opt RBRACE
@@ -84,7 +84,7 @@ stmt_opt:
 
 stmt_list:
   | statement                          { [$1] }
-  | stmt_list statement                { List.rev ($2 :: $1) }
+  | stmt_list statement                { $2 :: $1 }
 
 actuals_opt:
   | /* Nothing */                      { [] }
@@ -92,7 +92,7 @@ actuals_opt:
 
 actuals_list:
   | expr                               { [$1] }
-  | actuals_list COMMA expr            { List.rev ($3 :: $1) }
+  | actuals_list COMMA expr            { $3 :: $1 }
 
 params_opt:
   | /* nothing */                     { [] }
@@ -100,4 +100,4 @@ params_opt:
 
 params_list:
   | ID                                { [$1] }
-  | params_list COMMA ID              { List.rev ($3 :: $1) }
+  | params_list COMMA ID              { $3 :: $1 }
