@@ -140,7 +140,8 @@ let arg_body_to_c_body arg_body =
 
 let build_func_jump_table arg_func = ""
 
-let expr_check_syms st arg_expr =
+let expr_check_syms st arg_expr = st
+    (*
     | IntLiteral(i) -> "new_monotype(0, " ^ string_of_int i ^
                      ", 0, 0, 0, NULL, 0)"
     | StrLiteral(str) -> "new_monotype(1, 0, " ^ str ^ ", 0, 0, NULL, 0)"
@@ -170,28 +171,41 @@ let expr_check_syms st arg_expr =
             | Greater     -> "monotype_greater(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
             | Geq     -> "monotype_geq(" ^ monotype_of_expr e1 ^ ", " ^ monotype_of_expr e2 ^ ")"
         in arg_binop_to_c_binop e1 e2 op
+*)
 
 let rec stmt_check_syms st arg_stmt =
+    match arg_stmt with
     | Expr(e) -> expr_check_syms st e
     | IfElse(e, s1, s2) ->
         let st = expr_check_syms st e in
-        let st = stmt_check_syms st s1 in
-        let st = stmt_check_syms st s2
+        let st = List.fold_left stmt_check_syms st s1 in
+        List.fold_left stmt_check_syms st s2
     | If(e, s) ->
         let st = expr_check_syms st e in
-        let st = stmt_check_syms st s
+        List.fold_left stmt_check_syms st s
     | While(e, s) ->
         let st = expr_check_syms st e in
-        let st = stmt_check_syms st s
+        List.fold_left stmt_check_syms st s
     | ArrayAssign(s, l, el) ->
-        let st = expr_check_syms st e in
-        List.append st s
+        let st = List.fold_left expr_check_syms st el in
+        List.append st [s]
     | Print(s, e) ->
         expr_check_syms st e
 
+let list_contains_string l s =
+    List.fold_left (fun a b ->
+        if ((snd a) || (String.compare (fst a) b) = 0) then (s, true) else (s, false))
+        (s, false) l
+
 let build_func_sym_table arg_func =
     let st = [] in
-    let st = List.fold_left (fun a b -> List.append a b) st arg_func.formals in
+    (* Add function params to symbol table *)
+    let st = List.fold_left (fun a b ->
+        if (snd (list_contains_string a b)) then (print_string ("Function " ^
+        "parameters with matching names. Error.\n"); raise Exit) else List.append a [b])
+        st arg_func.formals
+    in
+    (* With param name context in the symbol table, check the function body. *)
     List.fold_left stmt_check_syms st arg_func.body
 
 (* Translate an arg function in the AST to a C function, returning a string of
@@ -210,9 +224,14 @@ let arg_func_to_c_func arg_func =
 (* Route the functions and body segments of the program pair to their respective
    handlers and return the result as a pair of strings. *)
 let translate_program arg =
+    (* Name working elements. *)
     let arg_funcs = fst arg in
     let arg_body = snd arg in
-  (*let (c_funcs, _, jt) = List.fold_left arg_func_to_c_func ([], []) arg_funcs in (* c_funcs, jt *)*)
+
+    (* Check variable scope conformity. *)
+    let _ = List.map build_func_sym_table arg_funcs in
+
+    (* Convert ARG to C. *)
     let c_funcs = List.map arg_func_to_c_func arg_funcs in
     let c_body = arg_body_to_c_body arg_body in
     (List.fold_left (fun a b -> a ^ b) "" c_funcs,
