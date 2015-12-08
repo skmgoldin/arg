@@ -212,13 +212,22 @@ let translate_program arg =
     (* Check variable scope conformity. *)
     let _ = List.map build_func_sym_table arg_funcs in
     let st = List.fold_left (fun a b -> List.append a [(b.fname, Function)]) [] arg_funcs in
-    let _ = List.fold_left stmt_check_syms st arg_body in
+    let st = List.fold_left stmt_check_syms st arg_body in
 
     (* Convert ARG to C. *)
     let c_funcs = List.map arg_func_to_c_func arg_funcs in
     let c_body = arg_body_to_c_body arg_body in
-    (List.fold_left (fun a b -> a ^ b) "" c_funcs,
-    List.fold_left (fun a b -> a ^ b) "" c_body)
+    (
+        List.fold_left (fun a b -> a ^ b) "" c_funcs,
+        List.fold_left (fun a b -> a ^ b) "" c_body,
+        st
+    )
+
+let generate_free_block st =
+    List.fold_left (fun a b ->
+        if (snd b) = Variable
+        then "if(" ^ (fst b) ^ ".isarray) { free(" ^ (fst b) ^ ".a); }\n"
+        else "") "" st
 
 (* Include necessary C libraries. Declare functions at top of file, then wrap
    body in a main function below.
@@ -227,10 +236,12 @@ let translate_program arg =
       of monotype.c in their own directory! *)
 *)
 let wrap_program translated_program =
-    let functions = fst translated_program in
-    let body = snd translated_program in
+    let (functions,_,_) = translated_program in
+    let (_,body,_) = translated_program in
+    let (_,_,st) = translated_program in
+    let free_block = generate_free_block st in
     "#include <stdio.h>\n#include \"monotype.c\"\n" ^ functions ^
-    "\n\nint main() {\n" ^ body ^ "\n\n\treturn 0;\n}\n"
+    "\n\nint main() {\n" ^ body ^ "\n\n" ^ free_block ^ "\treturn 0;\n}\n"
 
 let _ =
     let ic = open_in arg_file in
