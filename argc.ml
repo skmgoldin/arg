@@ -55,7 +55,8 @@ let rec monotype_of_expr = function
             List.fold_left (fun s e -> s ^ monotype_of_expr e ^ ", ") "" el in
         (* Arglist has an extra comma and space at its end. Remove them below. *)
         let strlen = String.length arglist in
-        let arglist = String.sub arglist 0 (strlen - 2) in
+        let arglist = if String.length arglist != 0 then
+        String.sub arglist 0 (strlen - 2) else "" in
         str ^ "(" ^ arglist ^ ")"
     | Id(str) -> str
     | Binop(e1, op, e2) ->
