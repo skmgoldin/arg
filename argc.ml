@@ -153,7 +153,8 @@ let rec expr_check_syms st arg_expr =
     | Assign(str, e) -> let st = expr_check_syms st e in
         if snd (list_contains_string st str) then st else List.append st [str]
     | Call(str, el) ->
-        (* Hmmm... I really need to implement checking for function defs *)
+        let _ = if snd (list_contains_string st str) then st else (print_string
+        ("A function is called which does not exist. Error.\n"); raise Exit) in
         List.fold_left expr_check_syms st el
     | Id(str) -> if snd (list_contains_string st str) then st else (print_string
         ("An ID is used which does not exist. Error.\n"); raise Exit)
