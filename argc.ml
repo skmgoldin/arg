@@ -140,8 +140,14 @@ let rec expr_check_syms st arg_expr =
         ("Cannot assign to an in-use function name. Error.\n"); raise Exit)
         else List.append st [(str, Variable)]
     | Call(str, el) ->
-        let _ = if snd (list_contains_string st str) then st else (print_string
-        ("A function is called which does not exist. Error.\n"); raise Exit) in
+        let _ = if (snd (list_contains_string st str) && not (snd (element_is_variable st str)))
+        then st
+        else if snd (list_contains_string st str)
+        then (print_string
+             ("You are trying to call a variable as a function. Error.\n"); raise Exit)
+        else (print_string
+             ("A function is called which does not exist. Error.\n"); raise Exit)
+        in
         List.fold_left expr_check_syms st el
     | Id(str) -> if snd (list_contains_string st str) then st else (print_string
         ("An ID is used which does not exist. Error.\n"); raise Exit)
