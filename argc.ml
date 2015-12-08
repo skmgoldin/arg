@@ -213,7 +213,8 @@ let translate_program arg =
 
     (* Check variable scope conformity. *)
     let _ = List.map build_func_sym_table arg_funcs in
-    let _ = List.fold_left stmt_check_syms [] arg_body in
+    let st = List.fold_left (fun a b -> List.append a [b.fname]) [] arg_funcs in
+    let _ = List.fold_left stmt_check_syms st arg_body in
 
     (* Convert ARG to C. *)
     let c_funcs = List.map arg_func_to_c_func arg_funcs in
