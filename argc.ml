@@ -97,13 +97,34 @@ let arg_print_to_c_print fmt expr =
     "printf(\"%f\\n\", " ^ monotype_of_expr expr ^ ".f);\n" ^
     "} else { printf(\"%s\\n\", \"Error!\"); }"
 
+let add_label_to_jt jt =
+    if List.length jt = 0 then ["j0"] else
+    let labelnum = List.length jt in
+    let label = "j" ^ string_of_int labelnum in
+    label :: jt
+
 (* Route an arg statement to its translator and return a string. *)
 let rec arg_stmt_to_c_stmt stmt jt =
     match stmt with
     | Expr(e) -> (monotype_of_expr e ^ ";\n", jt)
     | IfElse(e, s1, s2) -> ("" ^ "\n", jt)
     | If(e, s) -> ("" ^ "\n", jt)
-    | While(e, s) -> ("" ^ "\n", jt)
+    | While(e, s) ->
+        let jt = add_label_to_jt jt in
+        let label = List.hd jt in
+        let (while_body, jt) =
+            List.fold_left
+                (fun a b ->
+                    let (stmt, jt) = arg_stmt_to_c_stmt b (snd a) in
+                    ((fst a) @ [stmt], jt)
+                )
+            ([], jt) s
+        in
+        (
+            label ^ ":;\n" ^ (List.fold_left (fun a b -> a ^ b) "" while_body) ^
+            "goto " ^ label ^ ";",
+            jt
+        )
     | ArrayAssign(s, l, el) -> (new_monotype_array s l el ^ "\n", jt)
     | Print(s, e) -> (arg_print_to_c_print s e ^ "\n", jt)
 
