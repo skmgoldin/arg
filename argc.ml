@@ -116,6 +116,7 @@ let list_contains_string l s =
         if ((snd a) || (String.compare (fst a) (fst b)) = 0) then (s, true) else (s, false))
         (s, false) l
 
+(* Check if the string s is in the list l and if so, if it is a variable. *)
 let element_is_variable l s =
     List.fold_left (fun a b ->
         if ((snd a) || ((String.compare (fst a) (fst b)) = 0) && (snd b = Variable))
