@@ -1,0 +1,7 @@
+i = 0;
+msg = "Hello, world!";
+
+WHILE(i < 10) {
+    PRINT("%x\n", msg); 
+    i = i + 1;
+}
