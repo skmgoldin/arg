@@ -1,5 +1,6 @@
-(* TODO: Figure out memory freeing for arrays. This will probably be reliant on
-   our symbol table implementation. *)
+(* TODO: Allow use of array elements with a[5] syntax in expressions. *)
+(* TODO: While loops *)
+(* TODO: conditionals *)
 
 open Ast
 
@@ -156,7 +157,7 @@ let rec expr_check_syms st arg_expr =
         let _ = expr_check_syms st e1 in
         expr_check_syms st e2
 
- (* Do bookkeeping on the symbol table in statement context and note lookup
+(* Do bookkeeping on the symbol table in statement context and note lookup
    failures where relevant. *)
 let rec stmt_check_syms st arg_stmt =
     match arg_stmt with
