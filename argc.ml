@@ -1,6 +1,4 @@
 (* TODO: Allow use of array elements with a[5] syntax in expressions. *)
-(* TODO: While loops *)
-(* TODO: conditionals *)
 
 open Ast
 
@@ -253,8 +251,8 @@ let arg_func_to_c_func arg_func jt st =
 let remove_vars_from_st st =
     List.fold_left
         (fun a b ->
-            if snd (List.hd b) = Function
-            then a @ [(List.hd b)]
+            if snd b = Function
+            then a @ [b]
             else a
         )
         [] st
@@ -271,12 +269,13 @@ let translate_program arg =
         List.fold_left
         (fun a b ->
                 let (sl, jt, st) = a in
-                let (stmt, jt, st) = arg_func_to_c_func b jt st in
+                let (stmt, jt, st) = arg_func_to_c_func b jt
+                    (remove_vars_from_st st) in
                 (sl @ [stmt], jt, st)
         )
         ([], [], []) arg_funcs
     in
-    (* AT THIS POINT GET VARIABLE NAMES OUT OF ST *)
+    let st = remove_vars_from_st st in
     let (c_body, jt, st) = arg_body_to_c_body arg_body jt st in
     (
         List.fold_left (fun a b -> a ^ b) "" c_funcs,
