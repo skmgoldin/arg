@@ -98,17 +98,23 @@ let arg_print_to_c_print fmt expr =
     "} else { printf(\"%s\\n\", \"Error!\"); }"
 
 (* Route an arg statement to its translator and return a string. *)
-let rec arg_stmt_to_c_stmt = function
-    | Expr(e) -> monotype_of_expr e ^ ";\n"
-    | IfElse(e, s1, s2) -> "" ^ "\n"
-    | If(e, s) -> "" ^ "\n"
-    | While(e, s) -> "" ^ "\n"
-    | ArrayAssign(s, l, el) -> new_monotype_array s l el ^ "\n"
-    | Print(s, e) -> arg_print_to_c_print s e ^ "\n"
+let rec arg_stmt_to_c_stmt stmt jt =
+    match stmt with
+    | Expr(e) -> (monotype_of_expr e ^ ";\n", jt)
+    | IfElse(e, s1, s2) -> ("" ^ "\n", jt)
+    | If(e, s) -> ("" ^ "\n", jt)
+    | While(e, s) -> ("" ^ "\n", jt)
+    | ArrayAssign(s, l, el) -> (new_monotype_array s l el ^ "\n", jt)
+    | Print(s, e) -> (arg_print_to_c_print s e ^ "\n", jt)
 
 (* Convert a list of arg statements to a string of C statements *)
-let arg_body_to_c_body arg_body =
-    List.map arg_stmt_to_c_stmt arg_body
+let arg_body_to_c_body arg_body jt =
+    List.fold_left
+        (fun a b ->
+            let (stmt, jt) = arg_stmt_to_c_stmt b (snd a) in
+            ((fst a) @ [stmt], jt)
+        )
+    ([], jt) arg_body
 
 (* Utility function, return a pair, second of which is true if the given list
    contains the given string and false otherwise. *)
@@ -192,7 +198,7 @@ let build_func_sym_table arg_func =
 
 (* Translate an arg function in the AST to a C function, returning a string of
    that translation. *)
-let arg_func_to_c_func arg_func =
+let arg_func_to_c_func arg_func jt =
     let arglist =
         List.fold_left (fun a b -> a ^ "struct monotype " ^ b ^ ", ") "" arg_func.formals in
     (* Arglist has an extra comma and space at its end. Remove them below. *)
@@ -200,9 +206,19 @@ let arg_func_to_c_func arg_func =
     let arglist = if String.length arglist != 0 then
         String.sub arglist 0 (strlen - 2) else "" in
 
-    "struct monotype " ^ arg_func.fname ^ "(" ^ arglist ^ ") {\n" ^
-    List.fold_left (fun a b -> a ^ b ^ "\n") ""
-    (List.map arg_stmt_to_c_stmt arg_func.body) ^ "\n}"
+    let (func_body, jt) =
+        List.fold_left
+            (fun a b ->
+                 let (stmt, jt) = arg_stmt_to_c_stmt b (snd a) in
+                 ((fst a) @ [stmt], jt)
+            )
+        ([], jt) arg_func.body
+    in
+    (
+        "struct monotype " ^ arg_func.fname ^ "(" ^ arglist ^ ") {\n" ^
+        (List.fold_left (fun a b -> a ^ b) "" func_body) ^ "\n}",
+        jt
+    )
 
 (* Route the functions and body segments of the program pair to their respective
    handlers and return the result as a pair of strings. *)
@@ -217,8 +233,14 @@ let translate_program arg =
     let st = List.fold_left stmt_check_syms st arg_body in
 
     (* Convert ARG to C. *)
-    let c_funcs = List.map arg_func_to_c_func arg_funcs in
-    let c_body = arg_body_to_c_body arg_body in
+    let (c_funcs, jt) =
+        List.fold_left
+        (fun a b ->
+                    let (func, jt) = arg_func_to_c_func b (snd a) in
+                    ((fst a) @ [func], jt))
+        ([], []) arg_funcs
+    in
+    let (c_body, jt) = arg_body_to_c_body arg_body jt in
     (
         List.fold_left (fun a b -> a ^ b) "" c_funcs,
         List.fold_left (fun a b -> a ^ b) "" c_body,
