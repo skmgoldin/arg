@@ -107,8 +107,40 @@ let add_label_to_jt jt =
 let rec arg_stmt_to_c_stmt stmt jt =
     match stmt with
     | Expr(e) -> (monotype_of_expr e ^ ";\n", jt)
-    | IfElse(e, s1, s2) -> ("" ^ "\n", jt)
-    | If(e, s) -> ("" ^ "\n", jt)
+    | IfElse(e, s1, s2) ->
+        let (if_body, jt) =
+            List.fold_left
+                (fun a b ->
+                    let (stmt, jt) = arg_stmt_to_c_stmt b (snd a) in
+                    ((fst a) @ [stmt], jt)
+                )
+            ([], jt) s1
+        in
+        let (else_body, jt) =
+            List.fold_left
+                (fun a b ->
+                    let (stmt, jt) = arg_stmt_to_c_stmt b (snd a) in
+                    ((fst a) @ [stmt], jt)
+                )
+            ([], jt) s2
+        in
+        ("if(" ^ monotype_of_expr e ^ ".b) {\n" ^
+        (List.fold_left (fun a b -> a ^ b) "" if_body)
+        ^ "} else {\n" ^ (List.fold_left (fun a b -> a ^ b) "" else_body) ^ "}"
+        , jt)
+
+    | If(e, s) ->
+        let (if_body, jt) =
+            List.fold_left
+                (fun a b ->
+                    let (stmt, jt) = arg_stmt_to_c_stmt b (snd a) in
+                    ((fst a) @ [stmt], jt)
+                )
+            ([], jt) s
+        in
+        ("if(" ^ monotype_of_expr e ^ ".b) {\n" ^
+        (List.fold_left (fun a b -> a ^ b) "" if_body)
+        ^ "}", jt)
     | While(e, s) ->
         let jt = add_label_to_jt jt in
         let label = List.hd jt in
@@ -121,8 +153,9 @@ let rec arg_stmt_to_c_stmt stmt jt =
             ([], jt) s
         in
         (
-            label ^ ":;\n" ^ (List.fold_left (fun a b -> a ^ b) "" while_body) ^
-            "goto " ^ label ^ ";",
+            label ^ ":;\nif(" ^ monotype_of_expr e ^ ".b) {\n" ^
+            (List.fold_left (fun a b -> a ^ b) "" while_body) ^
+            "goto " ^ label ^ ";}",
             jt
         )
     | ArrayAssign(s, l, el) -> (new_monotype_array s l el ^ "\n", jt)
