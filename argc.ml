@@ -14,7 +14,8 @@ let list_contains_string l s =
         if ((snd a) || (String.compare (fst a) (fst b)) = 0) then (s, true) else (s, false))
         (s, false) l
 
-(* Check if the string s is in the list l and if so, if it is a variable. *)
+(* Utility function, return a pair, second of which is true if the given list
+   contains the given string and that string is a Variable. false otherwise. *)
 let element_is_variable l s =
     List.fold_left (fun a b ->
         if ((snd a) || ((String.compare (fst a) (fst b)) = 0) && (snd b = Variable))
@@ -24,8 +25,9 @@ let element_is_variable l s =
     (s, false) l
 
 (* Because everything in ARG must be represented by a C monotype, this function
-   should return strings of valid C code which will evaluate in C to a struct
-   monotype. *)
+   should return a pair, the first of which is a string of valid C code which
+   will evaluate in C to a struct monotype. The second of the pair is the
+   symbol table. *)
 let rec monotype_of_expr expr st =
     match expr with
     | IntLiteral(i) -> ("new_monotype(0, " ^ string_of_int i ^
@@ -141,13 +143,16 @@ let arg_print_to_c_print fmt expr st =
     "printf(\"%f\\n\", " ^ fst (monotype_of_expr expr st) ^ ".f);\n" ^
     "} else { printf(\"%s\\n\", \"Error!\"); }"
 
+(* Add a new, unique label to the head of the jump table. Return the new jump
+   table. *)
 let add_label_to_jt jt =
     if List.length jt = 0 then ["j0"] else
     let labelnum = List.length jt in
     let label = "j" ^ string_of_int labelnum in
     label :: jt
 
-(* Route an arg statement to its translator and return a string. *)
+(* Route an arg statement to its translator and return a triple with a valid C 
+   string, the jump table and the symbol table. *)
 let rec arg_stmt_to_c_stmt stmt jt st =
     match stmt with
     | Expr(e) ->
@@ -213,7 +218,8 @@ let rec arg_stmt_to_c_stmt stmt jt st =
       
     | Print(s, e) -> (arg_print_to_c_print s e st ^ "\n", jt, st)
 
-(* Convert a list of arg statements to a string of C statements *)
+(* Convert a list of arg statements to a list of valid C strings. Return that
+   list, the jump table and the symbol table. *)
 let arg_body_to_c_body arg_body jt st =
     List.fold_left
         (fun a b ->
@@ -224,7 +230,7 @@ let arg_body_to_c_body arg_body jt st =
     ([], jt, st) arg_body
 
 (* Translate an arg function in the AST to a C function, returning a string of
-   that translation. *)
+   that translation along with the jump table and symbol table. *)
 let arg_func_to_c_func arg_func jt st =
     let arglist =
         List.fold_left (fun a b -> a ^ "struct monotype " ^ b ^ ", ") "" arg_func.formals in
@@ -248,6 +254,8 @@ let arg_func_to_c_func arg_func jt st =
         jt, st
     )
 
+(* Utility function. Remove all scope_entities with the Variable type from the
+   symbol table. Call this after translating functions. *)
 let remove_vars_from_st st =
     List.fold_left
         (fun a b ->
