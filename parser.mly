@@ -66,6 +66,7 @@ expr:
   | FLOATLITERAL                       { FloatLiteral($1) }
   | BOOLLITERAL                        { BoolLiteral($1) }
   | ID                                 { Id($1) }
+  | ID LBRACK INTLITERAL RBRACK        { ArrId($1, $3) }
   | expr ADD expr                      { Binop($1, Add, $3) }
   | expr SUB expr                      { Binop($1, Sub, $3) }
   | expr MULT expr                     { Binop($1, Mult, $3) }

@@ -4,6 +4,7 @@ type expr =
   | Assign of string * expr
   | Call of string * expr list
   | Id of string
+  | ArrId of string * int
   | StrLiteral of string
   | IntLiteral of int
   | FloatLiteral of float

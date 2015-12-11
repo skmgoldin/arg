@@ -66,6 +66,11 @@ let rec monotype_of_expr expr st =
         then (str, st)
         else (print_string
             ("An ID is used which does not exist. Error.\n"); raise Exit)
+    | ArrId(str, i) ->
+        if snd (list_contains_string st str)
+        then (str ^ ".a[" ^ string_of_int i ^ "]", st)
+        else (print_string
+            ("An ID is used which does not exist. Error.\n"); raise Exit)
     | Binop(e1, op, e2) ->
         let arg_binop_to_c_binop e1 e2 = function
             | Add     -> ("monotype_add(" ^ fst (monotype_of_expr e1 st) ^ ", " ^
