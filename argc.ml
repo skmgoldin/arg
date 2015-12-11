@@ -1,5 +1,3 @@
-(* TODO: Allow use of array elements with a[5] syntax in expressions. *)
-
 open Ast
 
 let arg_file = Sys.argv.(1) ^ ".arg"
@@ -118,7 +116,7 @@ let new_monotype_array name len el st =
                 (fst p) ^ tmpname ^ "[" ^ string_of_int (snd p) ^
                 "] = " ^ fst (monotype_of_expr e st) ^ ";\n", succ (snd p)
             )
-            ("", 0) el
+            ("", 0) (List.rev el)
         )
     ) ^
 
