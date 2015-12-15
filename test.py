@@ -21,7 +21,7 @@ if __name__ == "__main__":
 						print(str(i+1) + ". "+program +": FAIL")
 						print("\tFailed to compile")
 						print "\t"+open("argerr", "r").read()
-						continue;
+						continue
 					os.system("gcc -w -o "+program+" tests/"+program+".c")
 					arg_output = subprocess.check_output(["./"+program])
 					os.system("rm " + program)
@@ -30,11 +30,14 @@ if __name__ == "__main__":
 					quit()
 			try:
 					os.system("gcc -w -o model tests/"+program+"-model.c")
-					model_output = subprocess.check_output(["./model"])
+					err = os.system("./model"+supp)
+					model_output = open("argerr", "r").read()
 					os.system("rm model")
 			except:
 					print("failed to run arg exec")
-					quit()
+					print(str(i+1) + ". "+program +": FAIL")
+					print "\tModel failed to compile"
+					continue
 			if arg_output == model_output:
 					print(str(i+1) + ". "+program +": PASS")
 			else:
