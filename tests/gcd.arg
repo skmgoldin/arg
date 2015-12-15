@@ -1,7 +1,11 @@
 FUNCTION gcd(a, b) {
 	WHILE(a != b) {
-		IF(a > b) a = a - b;
-		ELSE b = b - a;
+		IF(a > b) {
+			a = a - b;
+		}
+		ELSE {
+			b = b - a;
+		}
 	}
 	RETURN a;
 }
