@@ -5,7 +5,7 @@ int main() {
     char *msg = "Hello, world!";
 
     while(i < 10) {
-        printf("%d\n", msg); 
+        printf("%s\n", msg); 
         i = i + 1;
     }
 }
