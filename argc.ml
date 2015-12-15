@@ -281,6 +281,7 @@ let translate_program arg =
         List.fold_left
         (fun a b ->
                 let (sl, jt, st) = a in
+                let st = st @ [(b.fname, Function)] in
                 let (stmt, jt, st) = arg_func_to_c_func b jt
                     (remove_vars_from_st st) in
                 (sl @ [stmt], jt, st)
