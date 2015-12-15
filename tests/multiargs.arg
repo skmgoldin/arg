@@ -1,0 +1,14 @@
+FUNCTION multi(a,b,c,d,e,f) {
+	PRINT("%x\n", a);
+	PRINT("%x\n", b);
+	PRINT("%x\n", c);
+	PRINT("%x\n", d);
+	PRINT("%x\n", e);
+	PRINT("%x\n", f);
+}
+
+multi(1,2,3,4,5,6);
+multi(2,2,2,2,2,2);
+multi(77,3,2,62,2,2);
+multi(23,21,22,32,2,92);
+
