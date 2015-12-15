@@ -242,6 +242,7 @@ let arg_func_to_c_func arg_func jt st =
     let arglist = if String.length arglist != 0 then
         String.sub arglist 0 (strlen - 2) else "" in
 
+    let st = st @ (List.map (fun a -> (a, Variable))) arg_func.formals in  
     let (func_body, jt, st) =
         List.fold_left
             (fun a b ->
