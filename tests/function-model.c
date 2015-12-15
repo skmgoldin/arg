@@ -1,7 +1,7 @@
 #include <stdio.h>
 
 static void test(char *str) {
-	printf("str: %s\n", str);
+	printf("%s\n", str);
 }
 
 int main() {
