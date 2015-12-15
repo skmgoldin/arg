@@ -3,15 +3,16 @@ FUNCTION printfunc(val) {
 }
 
 len = 10;
-a[len];
+a[len] = {};
 
 i = 0;
 WHILE(i < len) {
-	a[i] = 10-i;
+	a[i] = 10 - i;
 	i = i + 1;
 }
 
-WHILE(i > 0) {
+i = i - 1;
+WHILE(i >= 0) {
 	printfunc(a[i]);
 	i = i - 1;
 }

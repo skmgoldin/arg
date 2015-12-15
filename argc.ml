@@ -66,7 +66,7 @@ let rec monotype_of_expr expr st =
             ("An ID \"" ^ str ^ "\" is used which does not exist. Error.\n"); raise Exit)
     | ArrId(str, i) ->
         if snd (list_contains_string st str)
-        then (str ^ ".a[" ^ string_of_int i ^ "]", st)
+        then (str ^ ".a[" ^ (fst (monotype_of_expr i st)) ^ ".i]", st)
         else (print_string
             ("An ID \"" ^ str ^ "\" is used which does not exist. Error.\n"); raise Exit)
     | Binop(e1, op, e2) ->
@@ -100,14 +100,14 @@ let rec monotype_of_expr expr st =
    el: an expression list, the evaluations of which comprise the array's contents*)
 let new_monotype_array name len el st =
 
-    (* Using name ^ len to create an internal name is a hack. A user could in
-       theory create an actual variable with that name. Need to use symtable? *)
-    let tmpname = name ^ string_of_int len in
+    (* HACK. A user could in theory create an actual variable with this name. *)
+    let tmpname = name ^ name ^ name ^ name in
 
+    let len = monotype_of_expr len st in
     (* First malloc a monotype array to store persistently in the stack
        monotype *)
     "struct monotype *" ^ tmpname ^
-    " = malloc(sizeof(struct monotype) * "^ string_of_int len ^ ");\n" ^
+    " = malloc(sizeof(struct monotype) * "^ (fst len) ^ ".i);\n" ^
 
     (* Load the evaluated results of the el into the malloc'd array in order. *)
     (fst
@@ -124,7 +124,7 @@ let new_monotype_array name len el st =
        malloc'd and loaded array. *)
     "struct monotype " ^ name ^ "  = " ^
     "new_monotype(4, 0, NULL, 0, 0, " ^ tmpname ^ ", " ^
-    string_of_int len ^ ");\n"
+    (fst len) ^ ".i);\n"
 
 (* Generate an if/else block that directs a monotype to the appropriate printf
    format string.
@@ -218,7 +218,8 @@ let rec arg_stmt_to_c_stmt stmt jt st =
         )
     | ArrayAssign(s, l, el) ->
         (new_monotype_array s l el st ^ "\n", jt, st @ [(s, Variable)])
-      
+    | ArrayElemAssign(s, i, e) ->
+        (s ^ ".a[" ^ (fst (monotype_of_expr i st)) ^ ".i] = " ^ (fst (monotype_of_expr e st) ^ ";\n"), jt, st)
     | Print(s, e) -> (arg_print_to_c_print s e st ^ "\n", jt, st)
 
 (* Convert a list of arg statements to a list of valid C strings. Return that

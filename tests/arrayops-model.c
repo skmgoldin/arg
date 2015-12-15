@@ -13,7 +13,9 @@ int main() {
 		a[i] = 10-i;
 		i++;
 	}
-	while(i > 0) {
+
+    i--;
+	while(i >= 0) {
 		printfunc(a[i]);
 		i--;
 	}
