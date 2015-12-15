@@ -1,8 +1,8 @@
 FUNCTION fib(n) {
 	IF(n < 2) {
-		RETURN 1;
+		return 1;
 	}
-	RETURN fib(n-1) + fib(n-2);
+	return fib(n-1) + fib(n-2);
 }
 
 PRINT("fib(0) = %x\n", fib(0));

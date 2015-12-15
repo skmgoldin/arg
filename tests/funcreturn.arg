@@ -1,5 +1,5 @@
 FUNCTION square(val) {
-	RETURN val * val;
+	return val * val;
 }
 
 a = 5;

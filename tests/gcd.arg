@@ -1,0 +1,12 @@
+FUNCTION gcd(a, b) {
+	WHILE(a != b) {
+		IF(a > b) a = a - b;
+		ELSE b = b - a;
+	}
+	return a;
+}
+
+PRINT("%x\n", gcd(2,10));
+PRINT("%x\n", gcd(4,100));
+PRINT("%x\n", gcd(3,15));
+PRINT("%x\n", gcd(100,250));
