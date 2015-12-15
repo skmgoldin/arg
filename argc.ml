@@ -218,7 +218,8 @@ let rec arg_stmt_to_c_stmt stmt jt st =
         )
     | ArrayAssign(s, l, el) ->
         (new_monotype_array s l el st ^ "\n", jt, st @ [(s, Variable)])
-      
+    | ArrayElemAssign(s, i, e) ->
+        (s ^ ".a[" ^ string_of_int i ^ "] = " ^ (fst (monotype_of_expr e st) ^ ";\n"), jt, st)
     | Print(s, e) -> (arg_print_to_c_print s e st ^ "\n", jt, st)
 
 (* Convert a list of arg statements to a list of valid C strings. Return that
