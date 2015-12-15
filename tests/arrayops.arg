@@ -3,15 +3,16 @@ FUNCTION printfunc(val) {
 }
 
 len = 10;
-a[len] = {}; /* TODO IN COMPILER */
+a[len] = {};
 
 i = 0;
 WHILE(i < len) {
-	a[0] = 10 - i; /* TODO IN COMPILER */
+	a[i] = 10 - i;
 	i = i + 1;
 }
 
-WHILE(i > 0) {
-	printfunc(a[0]);
+i = i - 1;
+WHILE(i >= 0) {
+	printfunc(a[i]);
 	i = i - 1;
 }
