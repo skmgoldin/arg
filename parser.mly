@@ -6,7 +6,7 @@
 %token LBRACE RBRACE
 %token LBRACK RBRACK
 %token ASSIGN
-%token FUNCTION WHILE IF ELSE PRINT
+%token FUNCTION WHILE IF ELSE PRINT RETURN
 %token <string> STRLITERAL
 %token <int>    INTLITERAL
 %token <float>  FLOATLITERAL
@@ -58,6 +58,7 @@ statement:
   | ID LBRACK expr RBRACK ASSIGN LBRACE actuals_opt RBRACE SEMI     { ArrayAssign($1, $3, $7) }
   | ID LBRACK expr RBRACK ASSIGN expr SEMI     { ArrayElemAssign($1, $3, $6) }
   | PRINT LPAREN STRLITERAL COMMA expr RPAREN SEMI { Print($3, $5) }
+  | RETURN expr SEMI                  { Return($2) }
 
 expr:
   | ID ASSIGN expr                     { Assign($1, $3) }

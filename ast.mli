@@ -19,6 +19,7 @@ type statement =
   | ArrayAssign of string * expr * expr list
   | ArrayElemAssign of string * expr * expr
   | Print of string * expr
+  | Return of expr
 
 type func = {
   fname : string;

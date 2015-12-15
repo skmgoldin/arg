@@ -213,7 +213,7 @@ let rec arg_stmt_to_c_stmt stmt jt st =
         (
             label ^ ":;\nif(" ^ fst (monotype_of_expr e st) ^ ".b) {\n" ^
             (List.fold_left (fun a b -> a ^ b) "" while_body) ^
-            "goto " ^ label ^ ";}",
+            "goto " ^ label ^ ";\n}",
             jt, st
         )
     | ArrayAssign(s, l, el) ->
@@ -221,6 +221,7 @@ let rec arg_stmt_to_c_stmt stmt jt st =
     | ArrayElemAssign(s, i, e) ->
         (s ^ ".a[" ^ (fst (monotype_of_expr i st)) ^ ".i] = " ^ (fst (monotype_of_expr e st) ^ ";\n"), jt, st)
     | Print(s, e) -> (arg_print_to_c_print s e st ^ "\n", jt, st)
+    | Return(e) -> ("return " ^ (fst (monotype_of_expr e st)) ^ ";\n", jt, st)
 
 (* Convert a list of arg statements to a list of valid C strings. Return that
    list, the jump table and the symbol table. *)

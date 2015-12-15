@@ -26,6 +26,7 @@ rule token = parse
 | "ELSE"    { ELSE }
 | "WHILE"   { WHILE }
 | "FUNCTION"{ FUNCTION }
+| "RETURN"  { RETURN }
 | "PRINT"   { PRINT }
 | '"'[^'\n''"']*'"' as lxm { STRLITERAL(lxm) }
 | ['0'-'9']+     as lxm { INTLITERAL(int_of_string lxm) }
