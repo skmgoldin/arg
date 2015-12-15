@@ -4,7 +4,7 @@ type expr =
   | Assign of string * expr
   | Call of string * expr list
   | Id of string
-  | ArrId of string * int
+  | ArrId of string * expr
   | StrLiteral of string
   | IntLiteral of int
   | FloatLiteral of float
@@ -16,7 +16,8 @@ type statement =
   | If of expr * statement list
   | IfElse of expr * statement list * statement list
   | While of expr * statement list
-  | ArrayAssign of string * int * expr list
+  | ArrayAssign of string * expr * expr list
+  | ArrayElemAssign of string * expr * expr
   | Print of string * expr
 
 type func = {
