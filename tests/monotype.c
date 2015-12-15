@@ -113,6 +113,8 @@ struct monotype monotype_add(struct monotype a, struct monotype b) {
   } else {
     error("can't add vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_sub(struct monotype a, struct monotype b) {
@@ -129,6 +131,8 @@ struct monotype monotype_sub(struct monotype a, struct monotype b) {
   } else {
     error("can't subtract vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_mult(struct monotype a, struct monotype b) {
@@ -145,6 +149,8 @@ struct monotype monotype_mult(struct monotype a, struct monotype b) {
   } else {
     error("can't add vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_div(struct monotype a, struct monotype b) {
@@ -161,6 +167,8 @@ struct monotype monotype_div(struct monotype a, struct monotype b) {
   } else {
     error("can't add vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_equal(struct monotype a, struct monotype b) {
@@ -177,6 +185,8 @@ struct monotype monotype_equal(struct monotype a, struct monotype b) {
   } else {
     error("can't == vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_neq(struct monotype a, struct monotype b) {
@@ -193,6 +203,8 @@ struct monotype monotype_neq(struct monotype a, struct monotype b) {
   } else {
     error("can't != vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_less(struct monotype a, struct monotype b) {
@@ -209,6 +221,8 @@ struct monotype monotype_less(struct monotype a, struct monotype b) {
   } else {
     error("can't < vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_greater(struct monotype a, struct monotype b) {
@@ -225,6 +239,8 @@ struct monotype monotype_greater(struct monotype a, struct monotype b) {
   } else {
     error("can't > vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_leq(struct monotype a, struct monotype b) {
@@ -241,6 +257,8 @@ struct monotype monotype_leq(struct monotype a, struct monotype b) {
   } else {
     error("can't <= vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
 
 struct monotype monotype_geq(struct monotype a, struct monotype b) {
@@ -257,4 +275,6 @@ struct monotype monotype_geq(struct monotype a, struct monotype b) {
   } else {
     error("can't >= vars of different types");
   }
+  /* Control should never get here. */
+  return new_monotype(0, 0, "", 0, 0.0, NULL, 0);
 }
