@@ -2,6 +2,11 @@ import subprocess
 import sys
 import os
 
+
+GOOD = '\033[92m'
+BAD = '\033[91m'
+END = '\033[0m'
+
 TESTS = []
 for f in os.listdir("tests"):
 	if ".arg" in f:
@@ -18,7 +23,7 @@ if __name__ == "__main__":
 			try:
 					err = os.system("./argc tests/"+program+supp)
 					if err != 0:
-						print(str(i+1) + ". "+program +": FAIL")
+						print(str(i+1) + ". "+program +": "+BAD+"FAIL"+END)
 						print("\tFailed to compile")
 						print "\t"+open("argerr", "r").read()
 						continue
@@ -35,13 +40,13 @@ if __name__ == "__main__":
 					os.system("rm model")
 			except:
 					print("failed to run arg exec")
-					print(str(i+1) + ". "+program +": FAIL")
+					print(str(i+1) + ". "+program +": " +BAD+"FAIL"+END)
 					print "\tModel failed to compile"
 					continue
 			if arg_output == model_output:
-					print(str(i+1) + ". "+program +": PASS")
+					print(str(i+1) + ". "+program +": "+GOOD+"PASS"+END)
 			else:
-					print(str(i+1) + ". "+program +": FAIL")
+					print(str(i+1) + ". "+program +": "+BAD+"FAIL"+END)
 					arg_lines = arg_output.split("\n")
 					model_lines = model_output.split("\n")
 					for i in range(0,len(arg_lines)):
