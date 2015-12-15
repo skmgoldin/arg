@@ -1,0 +1,4 @@
+a = 4 + 5 * 8;
+b = (4 + 5) * 8;
+PRINT("a is %x\n", a);
+PRINT("b is %x\n", b);
