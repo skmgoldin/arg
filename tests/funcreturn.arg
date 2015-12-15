@@ -1,0 +1,7 @@
+FUNCTION square(val) {
+	RETURN val * val;
+}
+
+a = 5;
+b = square(a);
+PRINT("the square of 5 is %x\n", b);

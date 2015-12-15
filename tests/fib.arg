@@ -1,0 +1,13 @@
+FUNCTION fib(n) {
+	IF(n < 2) {
+		RETURN 1;
+	}
+	RETURN fib(n-1) + fib(n-2);
+}
+
+PRINT("fib(0) = %x\n", fib(0));
+PRINT("fib(1) = %x\n", fib(1));
+PRINT("fib(2) = %x\n", fib(2));
+PRINT("fib(3) = %x\n", fib(3));
+PRINT("fib(4) = %x\n", fib(4));
+PRINT("fib(5) = %x\n", fib(5));
