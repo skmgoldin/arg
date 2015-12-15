@@ -41,7 +41,7 @@ let rec monotype_of_expr expr st =
             (str ^ " = " ^ rhs, st)
         else if snd (list_contains_string st str)
         then (print_string
-             ("You are trying to assign to a function. Error.\n"); raise Exit)
+             ("You are trying to assign to a function \"" ^ str ^ "\". Error.\n"); raise Exit)
         else let (rhs, st) = monotype_of_expr e st in
             ("struct monotype " ^ str ^ " = " ^ rhs, st @ [(str, Variable)])
     | Call(str, el) ->
@@ -56,19 +56,19 @@ let rec monotype_of_expr expr st =
             (str ^ "(" ^ arglist ^ ")", st)
         else if snd (list_contains_string st str)
         then (print_string
-             ("You are trying to call a variable as a function. Error.\n"); raise Exit)
+             ("You are trying to call a variable \"" ^ str ^ "\" as a function. Error.\n"); raise Exit)
         else (print_string
-             ("A function is called which does not exist. Error.\n"); raise Exit)
+             ("A function \"" ^ str ^ "\" is called which does not exist. Error.\n"); raise Exit)
     | Id(str) ->
         if snd (list_contains_string st str)
         then (str, st)
         else (print_string
-            ("An ID is used which does not exist. Error.\n"); raise Exit)
+            ("An ID \"" ^ str ^ "\" is used which does not exist. Error.\n"); raise Exit)
     | ArrId(str, i) ->
         if snd (list_contains_string st str)
         then (str ^ ".a[" ^ string_of_int i ^ "]", st)
         else (print_string
-            ("An ID is used which does not exist. Error.\n"); raise Exit)
+            ("An ID \"" ^ str ^ "\" is used which does not exist. Error.\n"); raise Exit)
     | Binop(e1, op, e2) ->
         let arg_binop_to_c_binop e1 e2 = function
             | Add     -> ("monotype_add(" ^ fst (monotype_of_expr e1 st) ^ ", " ^
