@@ -1,17 +1,17 @@
 a = 1;
 
 IF(a == 1) {
-	PRINT("%x\n", "a is true\n");
+	PRINT("%x\n", "a is true");
 }
 ELSE {
-	PRINT("%x\n", "a is false\n");
+	PRINT("%x\n", "a is false");
 }
 
 b = 0;
 
 IF(b == 1) {
-	PRINT("%x\n", "b is true\n");
+	PRINT("%x\n", "b is true");
 }
 ELSE {
-	PRINT("%x\n", "b is false\n");
+	PRINT("%x\n", "b is false");
 }
