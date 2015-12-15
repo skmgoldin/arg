@@ -7,5 +7,5 @@ static int square(int val) {
 int main() {
 	int a = 5;
 	int b = square(a);
-	printf("the square of 5 is %d\n", b);
+	printf("%d\n", b);
 }

@@ -1,7 +1,7 @@
 FUNCTION square(val) {
-	return val * val;
+	RETURN val * val;
 }
 
 a = 5;
 b = square(a);
-PRINT("the square of 5 is %x\n", b);
+PRINT("%x\n", b);

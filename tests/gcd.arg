@@ -3,7 +3,7 @@ FUNCTION gcd(a, b) {
 		IF(a > b) a = a - b;
 		ELSE b = b - a;
 	}
-	return a;
+	RETURN a;
 }
 
 PRINT("%x\n", gcd(2,10));
