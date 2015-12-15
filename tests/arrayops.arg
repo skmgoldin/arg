@@ -1,0 +1,17 @@
+FUNCTION printfunc(val) {
+	PRINT("%x\n", val);
+}
+
+len = 10;
+a[len];
+
+i = 0;
+while(i < len) {
+	a[i] = 10-i;
+	i = i + 1;
+}
+
+while(i > 0) {
+	printfunc(a[i]);
+	i = i - 1;
+}
