@@ -1,17 +1,17 @@
 a = 1;
 
 IF(a == 1) {
-	PRINT("a is true");
+	PRINT("a is true\n");
 }
 ELSE {
-	PRINT("a is false");
+	PRINT("a is false\n");
 }
 
 b = 0;
 
 IF(b == 1) {
-	PRINT("b is true");
+	PRINT("b is true\n");
 }
 ELSE {
-	PRINT("b is false");
+	PRINT("b is false\n");
 }
