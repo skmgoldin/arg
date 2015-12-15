@@ -44,7 +44,7 @@ func:
     {
       { fname = $2;
         formals = $4;
-        body = $7; }
+        body = (List.rev $7); }
     }
 
 statement:
@@ -55,7 +55,8 @@ statement:
   | IF LPAREN expr RPAREN LBRACE
     stmt_opt RBRACE                   { If($3, $6) }
   | WHILE LPAREN expr RPAREN LBRACE stmt_opt RBRACE { While($3, (List.rev $6)) }
-  | ID LBRACK INTLITERAL RBRACK ASSIGN LBRACE actuals_opt RBRACE SEMI     { ArrayAssign($1, $3, $7) }
+  | ID LBRACK expr RBRACK ASSIGN LBRACE actuals_opt RBRACE SEMI     { ArrayAssign($1, $3, $7) }
+  | ID LBRACK expr RBRACK ASSIGN expr SEMI     { ArrayElemAssign($1, $3, $6) }
   | PRINT LPAREN STRLITERAL COMMA expr RPAREN SEMI { Print($3, $5) }
 
 expr:
@@ -66,7 +67,7 @@ expr:
   | FLOATLITERAL                       { FloatLiteral($1) }
   | BOOLLITERAL                        { BoolLiteral($1) }
   | ID                                 { Id($1) }
-  | ID LBRACK INTLITERAL RBRACK        { ArrId($1, $3) }
+  | ID LBRACK expr RBRACK              { ArrId($1, $3) }
   | expr ADD expr                      { Binop($1, Add, $3) }
   | expr SUB expr                      { Binop($1, Sub, $3) }
   | expr MULT expr                     { Binop($1, Mult, $3) }
