@@ -1,0 +1,13 @@
+a = 10;
+b = 0;
+
+
+WHILE(a != b) {
+	IF(a > b) {
+		a = a - 1;
+	}
+	IF(a < b) {
+		a = a + 1;
+	}
+}
+PRINT("%x\n", a);

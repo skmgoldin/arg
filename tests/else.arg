@@ -1,0 +1,15 @@
+a = 1;
+b = 0;
+
+IF(a == 1) {
+	PRINT("%x\n", "a is true");
+	IF(b == 1) {
+		PRINT("%x\n", "b is true");
+	}
+	ELSE {
+		PRINT("%x\n", "b is false");
+	}
+}
+ELSE {
+	PRINT("%x\n", "a is false");
+}

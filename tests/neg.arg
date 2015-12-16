@@ -1,0 +1,6 @@
+a = 0-5;
+b = 0-10;
+c = a - b;
+PRINT("%x\n", a);
+PRINT("%x\n", b);
+PRINT("%x\n", c);
