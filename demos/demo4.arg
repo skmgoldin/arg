@@ -1,0 +1,3 @@
+variab = 5;
+
+variab(10);

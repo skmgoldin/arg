@@ -1,0 +1,7 @@
+len = 5;
+arr[len] = {0, "hello", "yo", 678, 8};
+i = 0;
+WHILE(i < len) {
+	PRINT("%x\n", arr[i]);
+	i = i + 1;
+}

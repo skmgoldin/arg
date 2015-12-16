@@ -1,0 +1,9 @@
+FUNCTION printall(a,b,c,d) {
+	PRINT("%x\n", a);
+	PRINT("%x\n", b);
+	PRINT("%x\n", c);
+	PRINT("%x\n", d);
+}
+
+printall("hello", "world", 1, 2);
+printall(2, "arg string", 1, 2);

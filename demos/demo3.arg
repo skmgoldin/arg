@@ -1,0 +1,6 @@
+FUNCTION rightname(a) {
+	PRINT("%x\n", a);
+}
+
+rightname(1);
+wrongname(1);
