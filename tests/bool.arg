@@ -2,14 +2,14 @@ a = true;
 b = false;
 
 IF(a == true) {
-	PRINT("a is true\n");
+	PRINT("%x\n", "a is true");
 }
 ELSE {
-	PRINT("a is false\n");
+	PRINT("%x\n", "a is false");
 }
 IF(b == true) {
-	PRINT("b is true\n");
+	PRINT("%x\n", "b is true");
 }
 ELSE {
-	PRINT("b is false\n");
+	PRINT("%x\n", "b is false");
 }
