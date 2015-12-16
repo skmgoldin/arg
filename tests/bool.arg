@@ -1,0 +1,15 @@
+a = true;
+b = false;
+
+IF(a == true) {
+	PRINT("a is true\n");
+}
+ELSE {
+	PRINT("a is false\n");
+}
+IF(b == true) {
+	PRINT("b is true\n");
+}
+ELSE {
+	PRINT("b is false\n");
+}
