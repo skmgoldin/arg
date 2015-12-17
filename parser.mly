@@ -51,9 +51,9 @@ statement:
   | expr SEMI                         { Expr($1) }
   | IF LPAREN expr RPAREN LBRACE
     stmt_opt RBRACE ELSE LBRACE
-    stmt_opt RBRACE                   { IfElse($3, $6, $10) }
+    stmt_opt RBRACE                   { IfElse($3, (List.rev $6), (List.rev $10)) }
   | IF LPAREN expr RPAREN LBRACE
-    stmt_opt RBRACE                   { If($3, $6) }
+    stmt_opt RBRACE                   { If($3, (List.rev $6)) }
   | WHILE LPAREN expr RPAREN LBRACE stmt_opt RBRACE { While($3, (List.rev $6)) }
   | ID LBRACK expr RBRACK ASSIGN LBRACE actuals_opt RBRACE SEMI     { ArrayAssign($1, $3, $7) }
   | ID LBRACK expr RBRACK ASSIGN expr SEMI     { ArrayElemAssign($1, $3, $6) }
