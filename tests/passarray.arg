@@ -1,0 +1,12 @@
+FUNCTION printarray(arr, len) {
+	i = 0;
+	while(i < len) {
+		PRINT("%x\n", arr[i]);
+		i = i+1;
+	}
+}
+
+a[5] = {1,2,3,4,5};
+b[3] = {1, 10, 100};
+printarray(a, 5);
+printarray(b, 3);
