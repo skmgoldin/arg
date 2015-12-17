@@ -1,6 +1,6 @@
 FUNCTION printarray(arr, len) {
 	i = 0;
-	while(i < len) {
+	WHILE(i < len) {
 		PRINT("%x\n", arr[i]);
 		i = i+1;
 	}
