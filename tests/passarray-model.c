@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-static int printarray(int * arr, len) {
+static int printarray(int * arr, int len) {
 	int i = 0;
 	while(i < len) {
 		printf("%d\n", arr[i]);
